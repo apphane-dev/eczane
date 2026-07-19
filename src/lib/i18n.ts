@@ -40,11 +40,16 @@ export interface Strings {
   whatsapp: string;
   directionsGoogle: string;
   directionsYandex: string;
+  directionsOsm: string;
   searchOnMap: string;
   directionsShort: string;
   listAriaLabel: string;
   mapAriaLabel: string;
   mapRegionLabel: string;
+  /** Accessible label for the docked list of pharmacy cards on the map. */
+  mapCardsLabel: string;
+  /** Announced when a pharmacy is selected on the map. */
+  mapSelectedAnnounce: (name: string) => string;
   footer: string;
   languageLabel: string;
 }
@@ -75,11 +80,14 @@ export const translations: Record<Locale, Strings> = {
     whatsapp: "WhatsApp",
     directionsGoogle: "Google Yol Tarifi",
     directionsYandex: "Yandex",
+    directionsOsm: "OpenStreetMap",
     searchOnMap: "Haritada Ara",
     directionsShort: "Yol Tarifi",
     listAriaLabel: "Eczane listesi",
     mapAriaLabel: "Harita görünümü",
     mapRegionLabel: "Nöbetçi eczaneler haritası",
+    mapCardsLabel: "Haritadaki eczaneler",
+    mapSelectedAnnounce: (name) => `${name} seçildi`,
     footer:
       "Veriler Antalya Eczacı Odası kaynaklıdır. Acil durumda eczaneyi arayarak teyit ediniz.",
     languageLabel: "Dil",
@@ -109,11 +117,14 @@ export const translations: Record<Locale, Strings> = {
     whatsapp: "WhatsApp",
     directionsGoogle: "Google Directions",
     directionsYandex: "Yandex",
+    directionsOsm: "OpenStreetMap",
     searchOnMap: "Search on Map",
     directionsShort: "Directions",
     listAriaLabel: "Pharmacy list",
     mapAriaLabel: "Map view",
     mapRegionLabel: "Map of on-duty pharmacies",
+    mapCardsLabel: "Pharmacies on the map",
+    mapSelectedAnnounce: (name) => `${name} selected`,
     footer:
       "Data sourced from the Antalya Chamber of Pharmacists. In an emergency, call the pharmacy to confirm.",
     languageLabel: "Language",
@@ -143,11 +154,14 @@ export const translations: Record<Locale, Strings> = {
     whatsapp: "WhatsApp",
     directionsGoogle: "Маршрут в Google",
     directionsYandex: "Yandex",
+    directionsOsm: "OpenStreetMap",
     searchOnMap: "Найти на карте",
     directionsShort: "Маршрут",
     listAriaLabel: "Список аптек",
     mapAriaLabel: "Вид карты",
     mapRegionLabel: "Карта дежурных аптек",
+    mapCardsLabel: "Аптеки на карте",
+    mapSelectedAnnounce: (name) => `Выбрана ${name}`,
     footer:
       "Данные предоставлены Палатой фармацевтов Антальи. В экстренном случае позвоните в аптеку для подтверждения.",
     languageLabel: "Язык",

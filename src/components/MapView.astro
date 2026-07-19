@@ -1,44 +1,147 @@
 ---
 import type { Pharmacy } from "../lib/types";
 import type { Strings } from "../lib/i18n";
+import {
+  groupByDistrict,
+  formatPhone,
+  telHref,
+  googleMapsHref,
+  yandexMapsHref,
+  osmHref,
+} from "../lib/pharmacy";
+
+const navPath = "M12 2 4 20l8-3.6L20 20 12 2Z";
 
 interface Props {
   pharmacies: Pharmacy[];
   t: Strings;
+  intlLocale: string;
 }
 
-const { pharmacies, t } = Astro.props;
+const { pharmacies, t, intlLocale } = Astro.props;
 
-// Only pharmacies with coordinates can be placed on the map.
-const points = pharmacies
-  .filter((p) => p.coordinates)
-  .map((p) => ({
-    name: p.name,
-    address: p.address,
-    phone: p.phone,
-    lat: p.coordinates!.lat,
-    lng: p.coordinates!.lng,
-  }));
+// Keep the docked cards in the same reading order as the list view
+// (pinned districts first, then alphabetical), limited to mappable points.
+const ordered = groupByDistrict(pharmacies)
+  .flatMap((g) => g.pharmacies)
+  .filter((p) => p.coordinates);
+
+const points = ordered.map((p) => ({
+  name: p.name,
+  address: p.address,
+  phone: p.phone,
+  lat: p.coordinates!.lat,
+  lng: p.coordinates!.lng,
+}));
 ---
 
 <div
-  class="map"
-  id="map"
-  aria-label={t.mapRegionLabel}
-  role="application"
-  data-directions-label={t.directionsShort}
+  class="map-shell"
+  data-intl-locale={intlLocale}
+  data-distance-suffix={t.distanceSuffix}
+  data-selected-tpl={t.mapSelectedAnnounce("%NAME%")}
 >
+  <div
+    class="map"
+    id="map"
+    aria-label={t.mapRegionLabel}
+    role="application"
+    data-directions-label={t.directionsShort}
+  >
+  </div>
+
+  <div
+    class="map-cards"
+    id="map-cards"
+    role="listbox"
+    aria-label={t.mapCardsLabel}
+  >
+    {
+      ordered.map((p, i) => (
+        <article
+          class="mapcard"
+          id={`mapcard-${i}`}
+          role="option"
+          aria-selected="false"
+          tabindex="0"
+          data-idx={i}
+          data-lat={p.coordinates!.lat}
+          data-lng={p.coordinates!.lng}
+        >
+          <div class="mapcard__body">
+            <span class="mapcard__district">{p.district}</span>
+            <h3 class="mapcard__name">{p.name}</h3>
+            <p class="mapcard__address">{p.address}</p>
+            <p class="mapcard__distance" hidden>
+              <span class="mapcard__distance-value" />
+            </p>
+            {p.phone && (
+              <a
+                class="card__phone"
+                href={telHref(p.phone)}
+                aria-label={`${t.call}: ${formatPhone(p.phone)}`}
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span class="card__phone-num">{formatPhone(p.phone)}</span>
+              </a>
+            )}
+          </div>
+          <div class="card__actions">
+            <a
+              class="btn btn--go"
+              href={googleMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
+              target="_blank"
+              rel="noopener"
+              aria-label={t.directionsGoogle}
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d={navPath} fill="currentColor" />
+              </svg>
+              Google
+            </a>
+            <a
+              class="btn btn--go"
+              href={yandexMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
+              target="_blank"
+              rel="noopener"
+              aria-label={t.directionsYandex}
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d={navPath} fill="currentColor" />
+              </svg>
+              Yandex
+            </a>
+            <a
+              class="btn btn--go"
+              href={osmHref(p.coordinates!.lat, p.coordinates!.lng)}
+              target="_blank"
+              rel="noopener"
+              aria-label={t.directionsOsm}
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d={navPath} fill="currentColor" />
+              </svg>
+              OSM
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="sr-only" id="map-status" role="status" aria-live="polite"></p>
 </div>
+
 <script id="map-data" type="application/json" set:html={JSON.stringify(points)} />
 
 <script>
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import {
-    telHref,
-    formatPhone,
-    googleMapsHref,
-  } from "../lib/pharmacy";
 
   interface Point {
     name: string;
@@ -50,10 +153,40 @@ const points = pharmacies
 
   const el = document.getElementById("map");
   const dataEl = document.getElementById("map-data");
-  if (!el || !dataEl) throw new Error("Map container missing");
+  const shell = document.querySelector<HTMLElement>(".map-shell");
+  const cardsEl = document.getElementById("map-cards");
+  const statusEl = document.getElementById("map-status");
+  if (!el || !dataEl || !shell || !cardsEl) {
+    throw new Error("Map container missing");
+  }
 
   const points: Point[] = JSON.parse(dataEl.textContent || "[]");
-  const directionsLabel = el.dataset.directionsLabel || "→";
+  const intlLocale = shell.dataset.intlLocale || "en";
+  const distanceSuffix = shell.dataset.distanceSuffix || "";
+  const selectedTpl = shell.dataset.selectedTpl || "%NAME%";
+
+  const kmFmt = new Intl.NumberFormat(intlLocale, {
+    style: "unit",
+    unit: "kilometer",
+    maximumFractionDigits: 1,
+  });
+
+  function haversineKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
 
   const map = new maplibregl.Map({
     container: el,
@@ -63,52 +196,177 @@ const points = pharmacies
     attributionControl: { compact: true },
   });
 
-  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
   map.addControl(
-    new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true,
-      showUserLocation: true,
-    }),
+    new maplibregl.NavigationControl({ showCompass: false }),
     "top-right",
   );
+  const geolocate = new maplibregl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: true,
+    showUserLocation: true,
+  });
+  map.addControl(geolocate, "top-right");
 
-  const esc = (s: string) =>
-    s.replace(/[&<>"']/g, (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] || c,
-    );
+  interface Entry {
+    card: HTMLElement;
+    marker: maplibregl.Marker;
+    lng: number;
+    lat: number;
+    name: string;
+  }
+  const entries: Entry[] = [];
+  const cards = Array.from(cardsEl.querySelectorAll<HTMLElement>(".mapcard"));
+
+  let activeIdx = -1;
+  // Suppress the scroll->map feedback loop while we scroll programmatically.
+  let suppressScroll = 0;
+
+  function setActive(
+    idx: number,
+    opts: { scroll?: boolean; fly?: boolean } = {},
+  ) {
+    if (idx < 0 || idx >= entries.length) return;
+    const changed = idx !== activeIdx;
+    if (activeIdx >= 0 && activeIdx !== idx) {
+      const prev = entries[activeIdx];
+      prev.card.setAttribute("aria-selected", "false");
+      prev.card.classList.remove("mapcard--active");
+      prev.marker.getElement().classList.remove("map-marker--active");
+    }
+    activeIdx = idx;
+    const cur = entries[idx];
+    cur.card.setAttribute("aria-selected", "true");
+    cur.card.classList.add("mapcard--active");
+    cur.marker.getElement().classList.add("map-marker--active");
+
+    if (opts.scroll) {
+      suppressScroll = performance.now();
+      cur.card.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+    if (opts.fly) {
+      map.flyTo({
+        center: [cur.lng, cur.lat],
+        zoom: Math.max(map.getZoom(), 14),
+        duration: 600,
+      });
+    }
+    if (changed && statusEl) {
+      statusEl.textContent = selectedTpl.replace("%NAME%", cur.name);
+    }
+  }
 
   map.on("load", () => {
     const bounds = new maplibregl.LngLatBounds();
+    const markerColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--marker")
+        .trim() || "#215f4e";
 
-    for (const p of points) {
-      const phoneRow = p.phone
-        ? `<a href="${telHref(p.phone)}">📞 ${esc(formatPhone(p.phone))}</a>`
-        : "";
-      const popup = new maplibregl.Popup({ offset: 24, maxWidth: "260px" }).setHTML(
-        `<div class="popup">
-          <strong>${esc(p.name)}</strong>
-          <span>${esc(p.address)}</span>
-          ${phoneRow}
-          <a href="${googleMapsHref(p.lat, p.lng)}" target="_blank" rel="noopener">${esc(directionsLabel)} →</a>
-        </div>`,
-      );
-
-      const markerColor =
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--marker")
-          .trim() || "#215f4e";
-
-      new maplibregl.Marker({ color: markerColor })
+    points.forEach((p, i) => {
+      const marker = new maplibregl.Marker({ color: markerColor })
         .setLngLat([p.lng, p.lat])
-        .setPopup(popup)
         .addTo(map);
-
+      const card = cards[i];
+      const mEl = marker.getElement();
+      mEl.style.cursor = "pointer";
+      mEl.setAttribute("aria-label", p.name);
+      mEl.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        setActive(i, { scroll: true, fly: true });
+      });
+      entries.push({ card, marker, lng: p.lng, lat: p.lat, name: p.name });
       bounds.extend([p.lng, p.lat]);
-    }
+    });
 
     if (!bounds.isEmpty()) {
-      map.fitBounds(bounds, { padding: 48, maxZoom: 14, duration: 0 });
+      map.fitBounds(bounds, { padding: 60, maxZoom: 14, duration: 0 });
     }
   });
+
+  // Card interactions: click/focus/keyboard select and sync the map.
+  cards.forEach((card, i) => {
+    card.addEventListener("click", (ev) => {
+      // Let action links (call/directions) behave normally.
+      if ((ev.target as HTMLElement).closest("a")) return;
+      setActive(i, { scroll: true, fly: true });
+    });
+    card.addEventListener("focus", () => setActive(i, { fly: true }));
+    card.addEventListener("keydown", (ev) => {
+      const k = (ev as KeyboardEvent).key;
+      if (k === "Enter" || k === " ") {
+        ev.preventDefault();
+        setActive(i, { scroll: true, fly: true });
+      } else if (k === "ArrowRight" || k === "ArrowDown") {
+        ev.preventDefault();
+        const n = entries[i + 1] ? i + 1 : i;
+        entries[n]?.card.focus();
+      } else if (k === "ArrowLeft" || k === "ArrowUp") {
+        ev.preventDefault();
+        const n = entries[i - 1] ? i - 1 : i;
+        entries[n]?.card.focus();
+      }
+    });
+  });
+
+  // Swiping/scrolling the carousel selects the centered card and flies the map.
+  let scrollRaf = 0;
+  cardsEl.addEventListener("scroll", () => {
+    if (performance.now() - suppressScroll < 700) return;
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(() => {
+      scrollRaf = 0;
+      const r = cardsEl.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      let best = -1;
+      let bestDist = Infinity;
+      entries.forEach((e, i) => {
+        const cr = e.card.getBoundingClientRect();
+        const d = Math.hypot(
+          cr.left + cr.width / 2 - cx,
+          cr.top + cr.height / 2 - cy,
+        );
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
+      if (best >= 0 && best !== activeIdx) setActive(best, { fly: true });
+    });
+  });
+
+  // When the user shares location, reorder cards by distance (nearest first).
+  geolocate.on("geolocate", (e: { coords: GeolocationCoordinates }) => {
+    const { latitude, longitude } = e.coords;
+    const ranked = entries
+      .map((entry) => ({
+        entry,
+        d: haversineKm(latitude, longitude, entry.lat, entry.lng),
+      }))
+      .sort((a, b) => a.d - b.d);
+
+    for (const { entry, d } of ranked) {
+      const row = entry.card.querySelector<HTMLElement>(".mapcard__distance");
+      const val = entry.card.querySelector<HTMLElement>(
+        ".mapcard__distance-value",
+      );
+      if (row && val) {
+        val.textContent = `${kmFmt.format(d)} ${distanceSuffix}`;
+        row.hidden = false;
+      }
+      cardsEl.appendChild(entry.card);
+    }
+
+    if (ranked[0]) {
+      const idx = entries.indexOf(ranked[0].entry);
+      setActive(idx, { scroll: true, fly: true });
+    }
+  });
+
+  // Recompute size when the map view becomes visible.
+  window.addEventListener("resize", () => map.resize());
 </script>

@@ -8,6 +8,7 @@ import {
   isMobilePhone,
   googleMapsHref,
   yandexMapsHref,
+  osmHref,
   googleSearchHref,
 } from "../lib/pharmacy";
 
@@ -19,6 +20,8 @@ interface Props {
 const { pharmacy, t } = Astro.props;
 const { name, address, phone, coordinates } = pharmacy;
 const mapQuery = `${name} ${address}`;
+
+const navPath = "M12 2 4 20l8-3.6L20 20 12 2Z";
 ---
 
 <article
@@ -37,19 +40,38 @@ const mapQuery = `${name} ${address}`;
 
   {
     phone && (
-      <a
-        class="card__phone"
-        href={telHref(phone)}
-        aria-label={`${t.call}: ${formatPhone(phone)}`}
-      >
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2Z"
-            fill="currentColor"
-          />
-        </svg>
-        <span class="card__phone-num">{formatPhone(phone)}</span>
-      </a>
+      <div class="card__contact">
+        <a
+          class="card__phone"
+          href={telHref(phone)}
+          aria-label={`${t.call}: ${formatPhone(phone)}`}
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span class="card__phone-num">{formatPhone(phone)}</span>
+        </a>
+        {isMobilePhone(phone) && (
+          <a
+            class="card__wa"
+            href={whatsappHref(phone)}
+            target="_blank"
+            rel="noopener"
+            aria-label={t.whatsapp}
+            title={t.whatsapp}
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.2-.2-1.1-1.5-1.1-2.8 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c0 .2.1.4 0 .5l-.4.6-.3.3c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.5.3 0 .2 0 .8-.2 1.3Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+        )}
+      </div>
     )
   }
 
@@ -69,41 +91,34 @@ const mapQuery = `${name} ${address}`;
             aria-label={t.directionsGoogle}
           >
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 2 4 20l8-3.6L20 20 12 2Z" fill="currentColor" />
+              <path d={navPath} fill="currentColor" />
             </svg>
-            {t.directionsShort}
+            Google
           </a>
-          <div class="card__actions-alt">
-            {phone && isMobilePhone(phone) && (
-              <a
-                class="btn btn--icon"
-                href={whatsappHref(phone)}
-                target="_blank"
-                rel="noopener"
-                aria-label={t.whatsapp}
-                title={t.whatsapp}
-              >
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.2-.2-1.1-1.5-1.1-2.8 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c0 .2.1.4 0 .5l-.4.6-.3.3c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.5.3 0 .2 0 .8-.2 1.3Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </a>
-            )}
-            <a
-              class="btn btn--icon"
-              href={yandexMapsHref(coordinates.lat, coordinates.lng)}
-              target="_blank"
-              rel="noopener"
-              aria-label={t.directionsYandex}
-              title={t.directionsYandex}
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 21 4 4l8 4 8-4-8 17Z" fill="currentColor" />
-              </svg>
-            </a>
-          </div>
+          <a
+            class="btn btn--go"
+            href={yandexMapsHref(coordinates.lat, coordinates.lng)}
+            target="_blank"
+            rel="noopener"
+            aria-label={t.directionsYandex}
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d={navPath} fill="currentColor" />
+            </svg>
+            Yandex
+          </a>
+          <a
+            class="btn btn--go"
+            href={osmHref(coordinates.lat, coordinates.lng)}
+            target="_blank"
+            rel="noopener"
+            aria-label={t.directionsOsm}
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d={navPath} fill="currentColor" />
+            </svg>
+            OSM
+          </a>
         </>
       ) : (
         <a

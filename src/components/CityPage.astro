@@ -183,7 +183,11 @@ const runtimeStrings = {
       </section>
 
       <section id="view-map" class="view" hidden aria-label={t.mapAriaLabel}>
-        <MapView pharmacies={data.pharmacies} t={t} />
+        <MapView
+          pharmacies={data.pharmacies}
+          t={t}
+          intlLocale={getIntlLocale(locale)}
+        />
       </section>
     </main>
 

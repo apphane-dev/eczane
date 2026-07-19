@@ -51,6 +51,10 @@ export function yandexMapsHref(lat: number, lng: number): string {
   return `https://yandex.com/maps/?pt=${lng},${lat}&z=16&l=map`;
 }
 
+export function osmHref(lat: number, lng: number): string {
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`;
+}
+
 export function googleSearchHref(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }

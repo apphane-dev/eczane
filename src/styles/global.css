@@ -292,6 +292,17 @@ main {
   display: none;
 }
 
+/* The map wants room: on wider screens let the map view break out of the
+   reading column so the map and its sidebar can breathe. */
+@media (min-width: 1000px) {
+  #view-map {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1440px, calc(100vw - 3rem));
+  }
+}
+
 .district {
   margin-bottom: 0.9rem;
 }
@@ -395,24 +406,54 @@ main {
   line-height: 1.35;
 }
 
-/* Demoted phone: a quiet, tappable tel: line — number stays as text so the
-   action row below reads as a uniform grid regardless of number length. */
+/* Secondary contact row: a quiet tel: line plus an optional WhatsApp chip.
+   Sits below the address and above the equal-weight directions buttons. */
+.card__contact {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.5rem;
+}
+
+/* Demoted phone: number stays as tabular text so it never competes with the
+   primary directions actions and rows stay a uniform grid. Sized a step
+   above the address — a phone number is a primary way to confirm a pharmacy —
+   while staying below the pharmacy name. */
 .card__phone {
   display: inline-flex;
   align-items: center;
-  gap: 0.34rem;
-  margin: 0 0 0.5rem;
+  gap: 0.36rem;
   color: var(--accent);
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   text-decoration: none;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
 }
 
+/* WhatsApp: a quiet secondary contact glyph, not a directions action. */
+.card__wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--muted);
+}
+
+.card__wa svg {
+  width: 15px;
+  height: 15px;
+}
+
+.card__wa:hover {
+  color: var(--accent);
+}
+
 .card__phone svg {
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   flex: none;
   opacity: 0.85;
 }
@@ -468,14 +509,16 @@ main {
   flex: none;
 }
 
-/* Primary action: Directions — getting there is the job, so it's the loud,
-   filled element. Fills the row; the alt actions sit at the right. */
+/* Primary actions: the three map providers get identical weight — Google,
+   Yandex and OSM are equal choices, so they share one filled style and split
+   the row into equal thirds for a calm, uniform rhythm. */
 .btn--go {
   background: var(--accent-fill);
   color: var(--on-accent);
   border-color: var(--accent-fill);
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
+  padding-inline: 0.4rem;
   letter-spacing: 0.01em;
 }
 
@@ -484,78 +527,177 @@ main {
   border-color: var(--accent-fill-hover);
 }
 
-/* Secondary actions grouped at the right edge for a stable rhythm. */
-.card__actions-alt {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex: none;
+.btn--go svg {
+  width: 13px;
+  height: 13px;
 }
 
-/* Icon-only chips (WhatsApp, Yandex) — square, quiet ink glyphs. */
-.btn--icon {
-  padding: 0.34rem;
-  width: 2rem;
-  color: var(--muted);
+/* ---- Map + docked cards ---- */
+:root {
+  --map-h: calc(100vh - 190px);
 }
 
-.btn--icon:hover {
-  color: var(--accent);
+.map-shell {
+  position: relative;
 }
 
-/* ---- Map ---- */
 .map {
   width: 100%;
-  height: calc(100vh - 190px);
-  min-height: 420px;
+  height: var(--map-h);
+  min-height: 460px;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
 }
 
-.popup strong {
-  display: block;
+/* Active pin: lift and glow so it reads as the selected pharmacy. */
+.map-marker--active {
+  z-index: 3;
+}
+
+.map-marker--active svg {
+  transform: scale(1.28);
+  transform-origin: bottom center;
+  filter: drop-shadow(0 3px 6px var(--glow));
+}
+
+/* Mobile: a horizontal, swipeable carousel docked over the map bottom.
+   Cards snap to center; siblings peek at the edges. */
+.map-cards {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 6% 0.75rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.map-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.mapcard {
+  scroll-snap-align: center;
+  flex: 0 0 88%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.7rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.mapcard--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 24px rgba(0, 0, 0, 0.32);
+}
+
+.mapcard__body {
+  min-width: 0;
+}
+
+.mapcard__district {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--accent-soft-text);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  margin-bottom: 0.2rem;
+}
+
+.mapcard__name {
+  margin: 0 0 0.1rem;
   font-family: var(--font-display);
   font-size: 0.9rem;
-  margin-bottom: 0.15rem;
-  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-.popup span {
-  display: block;
+.mapcard__address {
+  margin: 0 0 0.35rem;
   color: var(--muted);
-  font-size: 0.78rem;
-  margin-bottom: 0.35rem;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.popup a {
-  display: block;
-  font-size: 0.82rem;
+.mapcard .card__phone {
+  margin: 0;
+}
+
+.mapcard__distance {
+  margin: 0 0 0.3rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  margin-top: 0.1rem;
   color: var(--accent);
+  font-variant-numeric: tabular-nums;
 }
 
-.maplibregl-popup-content {
-  border-radius: 10px;
-  padding: 0.65rem 0.8rem;
-  font-family: var(--font);
-  background: var(--surface-2);
-  color: var(--ink);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+.mapcard__distance[hidden] {
+  display: none;
 }
 
-.maplibregl-popup-anchor-top .maplibregl-popup-tip {
-  border-bottom-color: var(--surface-2);
+.mapcard .card__actions {
+  margin-top: auto;
 }
-.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
-  border-top-color: var(--surface-2);
-}
-.maplibregl-popup-anchor-left .maplibregl-popup-tip {
-  border-right-color: var(--surface-2);
-}
-.maplibregl-popup-anchor-right .maplibregl-popup-tip {
-  border-left-color: var(--surface-2);
+
+/* Desktop: a vertical, scrollable sidebar of cards beside the map. */
+@media (min-width: 820px) {
+  .map-shell {
+    display: flex;
+    gap: 0.7rem;
+    align-items: stretch;
+  }
+
+  .map {
+    flex: 1 1 auto;
+  }
+
+  .map-cards {
+    position: static;
+    flex: 0 0 380px;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: var(--map-h);
+    min-height: 460px;
+    padding: 0.1rem 0.5rem 0.1rem 0.1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-snap-type: y proximity;
+    scrollbar-width: thin;
+  }
+
+  .map-cards::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+  }
+
+  .mapcard {
+    flex: none;
+    scroll-snap-align: start;
+    box-shadow: var(--shadow);
+  }
+
+  .mapcard--active {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
 }
 
 /* ---- Footer ---- */
