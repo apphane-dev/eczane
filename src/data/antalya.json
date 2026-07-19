@@ -1,6 +1,6 @@
 {
   "province": "Antalya",
-  "updatedAt": "2026-07-19T20:13:53.976Z",
+  "updatedAt": "2026-07-19T21:08:53.378Z",
   "pharmacies": [
     {
       "name": "MELTEM MERT ECZANESİ",
@@ -70,7 +70,7 @@
     },
     {
       "name": "SIHHIYE ECZANESİ",
-      "address": "SIHHIYE ECZANESİ\n                                                                        \n                                                                        0(242) 349-18-16",
+      "address": "GÜZELOBA MAH.NO:517 KARPUZKALDIRAN KAMPI KARSISI LARA",
       "phone": "02423491816",
       "province": "Antalya",
       "district": "Muratpaşa",
@@ -122,7 +122,7 @@
     },
     {
       "name": "ÇAĞLAYAN ECZANESİ",
-      "address": "ÇAĞLAYAN ECZANESİ\n                                                                        \n                                                                        0(242) 227-98-50",
+      "address": "KÜLTÜR MAH.TIP FAKÜLTESI OTOPARK ÇIKISI KARSISI YENI ÇAKIRLAR YOLU",
       "phone": "02422279850",
       "province": "Antalya",
       "district": "Kepez",
@@ -144,7 +144,7 @@
     },
     {
       "name": "EDA ECZANESİ",
-      "address": "EDA ECZANESİ\n                                                                        \n                                                                        0(538) 799-82-62",
+      "address": "ÖĞRETMENEVLERİ MAH. ANADOLU CAD. CEMALİ SENKAL SİTESİ A BLOK 104B KONYAALTI ANTALYA",
       "phone": "05387998262",
       "province": "Antalya",
       "district": "Konyaaltı",
@@ -155,7 +155,7 @@
     },
     {
       "name": "YILMAZ TURSUN ECZANESİ",
-      "address": "YILMAZ TURSUN ECZANESİ\n                                                                        \n                                                                        0(242) 503-00-53",
+      "address": "ÇIPLAKLI MAH.İNÖNÜ CAD.NO:155/3 DÖŞEMEALTI (0532 584 53 07)",
       "phone": "02425030053",
       "province": "Antalya",
       "district": "Döşemealtı",
@@ -166,7 +166,7 @@
     },
     {
       "name": "NASİP ECZANESİ",
-      "address": "NASİP ECZANESİ\n                                                                        \n                                                                        0(545) 509-00-59",
+      "address": "ÇALKAYA MAH. BERBEROĞLU ÇARŞISI 28109 SOK. NO:8/8 AKSU",
       "phone": "05455090059",
       "province": "Antalya",
       "district": "Aksu",
@@ -232,7 +232,7 @@
     },
     {
       "name": "NUMAN ECZANESİ",
-      "address": "NUMAN ECZANESİ\n                                                                        \n                                                                        0(242) 565-20-01",
+      "address": "KONAKLI MAH. 19.SOKAK.NO:4/A ALANYA",
       "phone": "02425652001",
       "province": "Antalya",
       "district": "Alanya",
@@ -254,7 +254,7 @@
     },
     {
       "name": "KISA ECZANESİ",
-      "address": "KISA ECZANESİ\n                                                                        \n                                                                        0(242) 743-12-00",
+      "address": "ÖRNEK MAH. ZÜBEYDE HANIM CAD. NO:52 MANAVGAT ANTALYA (DOĞU GARAJI VE SANAYİ KAVŞAĞINA GELMEDEN 9.NOTER YANI)",
       "phone": "02427431200",
       "province": "Antalya",
       "district": "Manavgat",
@@ -265,7 +265,7 @@
     },
     {
       "name": "ERSAN ECZANESİ",
-      "address": "ERSAN ECZANESİ\n                                                                        \n                                                                        0(242) 653-53-91",
+      "address": "ATATÜRK MEYDANI ÜSTEM AP. NO:12 KIREMITLI MAH.",
       "phone": "02426535391",
       "province": "Antalya",
       "district": "Korkuteli",
@@ -276,7 +276,7 @@
     },
     {
       "name": "DEMİRÖZ ECZANESİ",
-      "address": "DEMİRÖZ ECZANESİ\n                                                                        \n                                                                        0(242) 618-48-34",
+      "address": "GÜNDOGAN MAH. DEMIREL BULV. NO:105",
       "phone": "02426184834",
       "province": "Antalya",
       "district": "Elmalı",
@@ -309,7 +309,7 @@
     },
     {
       "name": "GÖKÇE UMAY ECZANESİ",
-      "address": "GÖKÇE UMAY ECZANESİ\n                                                                        \n                                                                        0(242) 841-84-84",
+      "address": "OVA MAH. ATATÜRK 1 NOLU KÜME EVLERİ NO:4 KAŞ ANTALYA",
       "phone": "02428418484",
       "province": "Antalya",
       "district": "Kaş",
@@ -320,7 +320,7 @@
     },
     {
       "name": "DEMRE ECZANESİ",
-      "address": "DEMRE ECZANESİ\n                                                                        \n                                                                        0(242) 871-26-06",
+      "address": "GÖKYAZI MH. EYNİHAL CAD. NO:16/A DEMRE ANTALYA",
       "phone": "02428712606",
       "province": "Antalya",
       "district": "Demre",
@@ -353,7 +353,7 @@
     },
     {
       "name": "EMRE ECZANESİ",
-      "address": "EMRE ECZANESİ\n                                                                        \n                                                                        0(530) 368-07-80",
+      "address": "**(GECE SAAT 23.59'A KADAR AÇIK)**  HASYURT MAH.SAHİL CAD.NO:3/C FİNİKE",
       "phone": "05303680780",
       "province": "Antalya",
       "district": "Finike",
@@ -364,7 +364,7 @@
     },
     {
       "name": "BURCU ECZANESİ",
-      "address": "BURCU ECZANESİ\n                                                                        \n                                                                        0(242) 887-03-80",
+      "address": "KASAPÇAYIRI MH. KANUNI SK. NO:18/A",
       "phone": "02428870380",
       "province": "Antalya",
       "district": "Kumluca",
@@ -386,7 +386,7 @@
     },
     {
       "name": "MARİNA ECZANESİ",
-      "address": "MARİNA ECZANESİ\n                                                                        \n                                                                        0(501) 054-56-49",
+      "address": "MERKEZ MAH.DENİZ CAD.NO:42/1B KEMER/ANTALYA",
       "phone": "05010545649",
       "province": "Antalya",
       "district": "Kemer",
@@ -408,7 +408,7 @@
     },
     {
       "name": "MELEK ECZANESİ",
-      "address": "MELEK ECZANESİ\n                                                                        \n                                                                        0(242) 715-30-53",
+      "address": "*(GECE SAAT 02:00'A KADAR AÇIK)* BELEK MAH. KÖPRÜ CAD. NO:13/1 SERİK",
       "phone": "02427153053",
       "province": "Antalya",
       "district": "Serik",
@@ -419,7 +419,7 @@
     },
     {
       "name": "GAZİPAŞA ECZANESİ",
-      "address": "GAZİPAŞA ECZANESİ\n                                                                        \n                                                                        0(242) 572-71-71",
+      "address": "CUMHURİYET MAH.İPEK 2 SOK. 14/A-2 GAZİPAŞA.YENİ DEVLET HASTANESİ KARŞISI.",
       "phone": "02425727171",
       "province": "Antalya",
       "district": "Gazipaşa",
@@ -430,7 +430,7 @@
     },
     {
       "name": "MURTİÇİ ECZANESİ",
-      "address": "MURTİÇİ ECZANESİ\n                                                                        \n                                                                        0(242) 678-13-00",
+      "address": "HACI ILYAS MAH. ATATÜRK CAD. BAGKUR EVLERI I-BLOK NO.58/A",
       "phone": "02426781300",
       "province": "Antalya",
       "district": "Akseki",

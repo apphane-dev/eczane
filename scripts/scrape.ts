@@ -64,30 +64,46 @@ function parsePharmacies(html: string, province: string): Pharmacy[] {
       .each((_, card) => {
         const $card = $(card);
 
-        const name = $card
-          .find("div:first-child > div > a:first-child")
-          .first()
-          .text()
-          .trim();
+        // Each .nobetciDiv has exactly two direct child <div> columns: a
+        // name/phone column followed by an address column. We navigate via
+        // .children("div") (direct children only) rather than cheerio's
+        // .find("div:first-child > div ...", which matches :first-child /
+        // :last-child anywhere in the subtree -- not just among the card's
+        // direct children -- and on some cards ends up pulling the address
+        // out of the name/phone column instead.
+        const columns = $card.children("div");
+        const nameColumn = columns.first();
+        const addressColumn = columns.last();
 
-        const rawPhone = $card
-          .find("div:first-child > div > a:last-child")
-          .first()
-          .text()
-          .trim();
+        const name = nameColumn.find("a").first().text().trim();
+
+        const rawPhone = nameColumn.find("a").last().text().trim();
         const phone = rawPhone ? normalizePhone(rawPhone) : null;
 
-        const address = $card
-          .find("div:last-child > div")
-          .first()
-          .text()
-          .trim();
+        const addressContainer = addressColumn.children("div").first();
+        let address = addressContainer.text().trim();
 
-        const href = $card
-          .find("div:last-child > div > a")
-          .first()
-          .attr("href");
+        const href = addressContainer.find("a").first().attr("href");
         const coordinates = parseCoordinates(href);
+
+        // Guard against the address column collapsing back into the
+        // name/phone content (e.g. malformed markup on a card): if what we
+        // extracted looks like the name+phone pair rather than a street
+        // address, fall back to the raw address column text, and failing
+        // that, an explicit placeholder rather than an empty string.
+        const looksLikeNamePhone =
+          address.length === 0 ||
+          (name.length > 0 &&
+            address.includes(name) &&
+            rawPhone.length > 0 &&
+            address.includes(rawPhone));
+        if (looksLikeNamePhone) {
+          const fallback = addressColumn.text().trim();
+          address =
+            fallback.length > 0 && fallback !== `${name}\n${rawPhone}`
+              ? fallback
+              : "Adres bilgisi bulunamadı";
+        }
 
         if (!name) return;
 
