@@ -36,10 +36,21 @@ scripts/
 
 ## Deployment
 
-`.github/workflows/deploy.yml` scrapes all configured cities, builds the site,
-and deploys it to GitHub Pages. It runs on push to `main`, on a daily cron
-(`23 3 * * *` UTC) to keep pharmacy data fresh, and can be triggered manually
-via `workflow_dispatch`.
+`.github/workflows/deploy.yml` builds the site and deploys `dist/` to Cloudflare
+Pages (project `eczane`) via `cloudflare/wrangler-action@v3`. It runs on push to
+`main` and can be triggered manually via `workflow_dispatch`. The workflow does
+not run the scraper — pharmacy data is committed to the repo, so the site builds
+from whatever JSON is currently in `src/data/`.
+
+Pharmacy data is refreshed on a host machine by running `scripts/update-data.sh`,
+which re-scrapes `antalya`, commits any changes under `src/data/`, and pushes to
+`origin main`. Schedule it with cron, for example daily at 06:17:
+
+```
+17 6 * * * /path/to/repo/scripts/update-data.sh
+```
+
+Each push then triggers the Cloudflare Pages deploy above.
 
 ## Adding a city
 
@@ -50,5 +61,5 @@ via `workflow_dispatch`.
    `.ilcebas`, `.nobetciDiv` structure).
 3. Run `npm run scrape -- <slug>` and verify `src/data/<slug>.json` looks
    correct (plausible pharmacy count, mostly non-null coordinates).
-4. Add the new slug to the scrape step in
-   `.github/workflows/deploy.yml`.
+4. If you want the host-side refresh to cover the new city, add a corresponding
+   `npm run scrape -- <slug>` line to `scripts/update-data.sh`.
