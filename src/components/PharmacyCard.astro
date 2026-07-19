@@ -1,5 +1,6 @@
 ---
 import type { Pharmacy } from "../lib/types";
+import type { Strings } from "../lib/i18n";
 import {
   formatPhone,
   telHref,
@@ -12,9 +13,10 @@ import {
 
 interface Props {
   pharmacy: Pharmacy;
+  t: Strings;
 }
 
-const { pharmacy } = Astro.props;
+const { pharmacy, t } = Astro.props;
 const { name, address, phone, coordinates } = pharmacy;
 const mapQuery = `${name} ${address}`;
 ---
@@ -38,7 +40,11 @@ const mapQuery = `${name} ${address}`;
   <div class="card__actions">
     {
       phone && (
-        <a class="btn btn--call" href={telHref(phone)}>
+        <a
+          class="btn btn--call"
+          href={telHref(phone)}
+          aria-label={`${t.call}: ${formatPhone(phone)}`}
+        >
           <span aria-hidden="true">📞</span> {formatPhone(phone)}
         </a>
       )
@@ -51,7 +57,7 @@ const mapQuery = `${name} ${address}`;
           target="_blank"
           rel="noopener"
         >
-          <span aria-hidden="true">💬</span> WhatsApp
+          <span aria-hidden="true">💬</span> {t.whatsapp}
         </a>
       )
     }
@@ -64,7 +70,7 @@ const mapQuery = `${name} ${address}`;
             target="_blank"
             rel="noopener"
           >
-            Google Yol Tarifi
+            {t.directionsGoogle}
           </a>
           <a
             class="btn btn--map"
@@ -72,7 +78,7 @@ const mapQuery = `${name} ${address}`;
             target="_blank"
             rel="noopener"
           >
-            Yandex
+            {t.directionsYandex}
           </a>
         </>
       ) : (
@@ -82,7 +88,7 @@ const mapQuery = `${name} ${address}`;
           target="_blank"
           rel="noopener"
         >
-          Haritada Ara
+          {t.searchOnMap}
         </a>
       )
     }

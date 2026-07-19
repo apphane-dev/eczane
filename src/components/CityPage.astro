@@ -1,0 +1,254 @@
+---
+import type { CityData } from "../lib/types";
+import { groupByDistrict } from "../lib/pharmacy";
+import {
+  locales,
+  type Locale,
+  translations,
+  formatUpdatedAt,
+  getIntlLocale,
+  cityPath,
+} from "../lib/i18n";
+import PharmacyCard from "./PharmacyCard.astro";
+import MapView from "./MapView.astro";
+import antalyaData from "../data/antalya.json";
+import "../styles/global.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = translations[locale];
+
+const data = antalyaData as CityData;
+const groups = groupByDistrict(data.pharmacies);
+const updated = formatUpdatedAt(data.updatedAt, locale);
+const total = data.pharmacies.length;
+const site = Astro.site?.origin ?? "";
+
+// Strings needed by the client-side script (geolocation UI).
+const runtimeStrings = {
+  intlLocale: getIntlLocale(locale),
+  distanceSuffix: t.distanceSuffix,
+  locating: t.locating,
+  locateSorted: t.locateSorted,
+  locateFailed: t.locateFailed,
+  locateUnsupported: t.locateUnsupported,
+};
+---
+
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={t.metaDescription} />
+    <title>{t.pageTitle}</title>
+    {
+      locales.map((loc) => (
+        <link
+          rel="alternate"
+          hreflang={translations[loc].htmlLang}
+          href={`${site}${cityPath(loc)}`}
+        />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={`${site}${cityPath("tr")}`}
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="site-header__top">
+          <h1 class="site-header__title">
+            <span class="cross" aria-hidden="true">+</span>
+            {t.pageTitle}
+          </h1>
+          <nav class="lang" aria-label={t.languageLabel}>
+            {
+              locales.map((loc) => (
+                <a
+                  href={cityPath(loc)}
+                  hreflang={translations[loc].htmlLang}
+                  lang={translations[loc].htmlLang}
+                  aria-current={loc === locale ? "true" : undefined}
+                  class:list={["lang__link", { "lang__link--active": loc === locale }]}
+                >
+                  {translations[loc].htmlLang.toUpperCase()}
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+        <p class="site-header__sub">{t.onDutyCount(total)}</p>
+        <p class="site-header__meta">{t.lastUpdated}: {updated}</p>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="toolbar__inner">
+        <div class="toggle" role="group" aria-label={t.viewGroupLabel}>
+          <button id="view-list-btn" aria-pressed="true">{t.viewList}</button>
+          <button id="view-map-btn" aria-pressed="false">{t.viewMap}</button>
+        </div>
+        <button id="locate-btn" class="btn-locate">
+          <span aria-hidden="true">📍</span> {t.locate}
+        </button>
+      </div>
+    </div>
+
+    <main>
+      <section id="view-list" class="view" aria-label={t.listAriaLabel}>
+        {
+          groups.map((group) => (
+            <div class="district">
+              <div class="district__head">
+                <h2 class="district__name">{group.district}</h2>
+                <span class="district__count">{group.pharmacies.length}</span>
+              </div>
+              <div class="cards">
+                {group.pharmacies.map((pharmacy) => (
+                  <PharmacyCard pharmacy={pharmacy} t={t} />
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <section id="view-map" class="view" hidden aria-label={t.mapAriaLabel}>
+        <MapView pharmacies={data.pharmacies} t={t} />
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>{t.footer}</p>
+    </footer>
+
+    <script
+      id="i18n-strings"
+      type="application/json"
+      set:html={JSON.stringify(runtimeStrings)}
+    />
+
+    <script>
+      interface RuntimeStrings {
+        intlLocale: string;
+        distanceSuffix: string;
+        locating: string;
+        locateSorted: string;
+        locateFailed: string;
+        locateUnsupported: string;
+      }
+
+      const S: RuntimeStrings = JSON.parse(
+        document.getElementById("i18n-strings")?.textContent || "{}",
+      );
+
+      // --- View toggle ---
+      const listBtn = document.getElementById("view-list-btn")!;
+      const mapBtn = document.getElementById("view-map-btn")!;
+      const listView = document.getElementById("view-list")!;
+      const mapView = document.getElementById("view-map")!;
+
+      function setView(view: "list" | "map") {
+        const isMap = view === "map";
+        listView.hidden = isMap;
+        mapView.hidden = !isMap;
+        listBtn.setAttribute("aria-pressed", String(!isMap));
+        mapBtn.setAttribute("aria-pressed", String(isMap));
+        // Nudge MapLibre to recompute size when it becomes visible.
+        window.dispatchEvent(new Event("resize"));
+      }
+
+      listBtn.addEventListener("click", () => setView("list"));
+      mapBtn.addEventListener("click", () => setView("map"));
+
+      // --- Geolocation distance (haversine) ---
+      function haversineKm(
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number,
+      ): number {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      }
+
+      const locateBtn = document.getElementById(
+        "locate-btn",
+      ) as HTMLButtonElement;
+
+      const kmFmt = new Intl.NumberFormat(S.intlLocale, {
+        style: "unit",
+        unit: "kilometer",
+        maximumFractionDigits: 1,
+      });
+
+      function applyDistances(lat: number, lng: number) {
+        const cards = Array.from(
+          document.querySelectorAll<HTMLElement>(".card"),
+        );
+        for (const card of cards) {
+          const clat = parseFloat(card.dataset.lat || "");
+          const clng = parseFloat(card.dataset.lng || "");
+          const row = card.querySelector<HTMLElement>(".card__distance");
+          const value = card.querySelector<HTMLElement>(".card__distance-value");
+          if (Number.isNaN(clat) || Number.isNaN(clng) || !row || !value) {
+            continue;
+          }
+          const d = haversineKm(lat, lng, clat, clng);
+          value.textContent = `${kmFmt.format(d)} ${S.distanceSuffix}`;
+          row.hidden = false;
+          card.dataset.distance = String(d);
+        }
+        // Sort cards within each district by distance.
+        for (const container of Array.from(
+          document.querySelectorAll<HTMLElement>(".cards"),
+        )) {
+          const sorted = Array.from(
+            container.querySelectorAll<HTMLElement>(".card"),
+          ).sort(
+            (a, b) =>
+              parseFloat(a.dataset.distance || "Infinity") -
+              parseFloat(b.dataset.distance || "Infinity"),
+          );
+          sorted.forEach((c) => container.appendChild(c));
+        }
+      }
+
+      locateBtn.addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          locateBtn.textContent = S.locateUnsupported;
+          locateBtn.disabled = true;
+          return;
+        }
+        locateBtn.disabled = true;
+        locateBtn.textContent = S.locating;
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            applyDistances(pos.coords.latitude, pos.coords.longitude);
+            locateBtn.textContent = S.locateSorted;
+          },
+          () => {
+            locateBtn.disabled = false;
+            locateBtn.textContent = S.locateFailed;
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 },
+        );
+      });
+    </script>
+  </body>
+</html>

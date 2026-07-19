@@ -56,6 +56,13 @@ a {
   gap: 0.35rem;
 }
 
+.site-header__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .site-header__title {
   margin: 0;
   font-size: 1.5rem;
@@ -63,6 +70,36 @@ a {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.lang {
+  display: inline-flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 3px;
+  flex: none;
+}
+
+.lang__link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+.lang__link--active {
+  background: #fff;
+  color: var(--green-dark);
+  opacity: 1;
+}
+
+.lang__link:hover {
+  opacity: 1;
 }
 
 .cross {
