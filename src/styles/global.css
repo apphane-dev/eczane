@@ -389,10 +389,36 @@ main {
 }
 
 .card__address {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.4rem;
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.35;
+}
+
+/* Demoted phone: a quiet, tappable tel: line — number stays as text so the
+   action row below reads as a uniform grid regardless of number length. */
+.card__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.card__phone svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  opacity: 0.85;
+}
+
+.card__phone:hover .card__phone-num {
+  text-decoration: underline;
 }
 
 .card__distance {
@@ -442,23 +468,31 @@ main {
   flex: none;
 }
 
-/* Primary action: Call — filled with the sign red, number set tabular. */
-.btn--call {
+/* Primary action: Directions — getting there is the job, so it's the loud,
+   filled element. Fills the row; the alt actions sit at the right. */
+.btn--go {
   background: var(--accent-fill);
   color: var(--on-accent);
   border-color: var(--accent-fill);
   flex: 1 1 auto;
   min-width: 0;
-  font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
 }
 
-.btn--call:hover {
+.btn--go:hover {
   background: var(--accent-fill-hover);
   border-color: var(--accent-fill-hover);
 }
 
-/* Icon-only chips (WhatsApp, directions) — square, quiet ink glyphs. */
+/* Secondary actions grouped at the right edge for a stable rhythm. */
+.card__actions-alt {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: none;
+}
+
+/* Icon-only chips (WhatsApp, Yandex) — square, quiet ink glyphs. */
 .btn--icon {
   padding: 0.34rem;
   width: 2rem;
@@ -466,10 +500,6 @@ main {
 }
 
 .btn--icon:hover {
-  color: var(--accent);
-}
-
-.btn--search {
   color: var(--accent);
 }
 
