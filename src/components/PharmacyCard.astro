@@ -1,0 +1,90 @@
+---
+import type { Pharmacy } from "../lib/types";
+import {
+  formatPhone,
+  telHref,
+  whatsappHref,
+  isMobilePhone,
+  googleMapsHref,
+  yandexMapsHref,
+  googleSearchHref,
+} from "../lib/pharmacy";
+
+interface Props {
+  pharmacy: Pharmacy;
+}
+
+const { pharmacy } = Astro.props;
+const { name, address, phone, coordinates } = pharmacy;
+const mapQuery = `${name} ${address}`;
+---
+
+<article
+  class="card"
+  data-name={name}
+  data-address={address}
+  data-phone={phone ?? ""}
+  data-lat={coordinates?.lat ?? ""}
+  data-lng={coordinates?.lng ?? ""}
+>
+  <h3 class="card__name">{name}</h3>
+  <p class="card__address">{address}</p>
+
+  <p class="card__distance" hidden>
+    <span class="card__distance-icon" aria-hidden="true">📍</span>
+    <span class="card__distance-value"></span>
+  </p>
+
+  <div class="card__actions">
+    {
+      phone && (
+        <a class="btn btn--call" href={telHref(phone)}>
+          <span aria-hidden="true">📞</span> {formatPhone(phone)}
+        </a>
+      )
+    }
+    {
+      phone && isMobilePhone(phone) && (
+        <a
+          class="btn btn--whatsapp"
+          href={whatsappHref(phone)}
+          target="_blank"
+          rel="noopener"
+        >
+          <span aria-hidden="true">💬</span> WhatsApp
+        </a>
+      )
+    }
+    {
+      coordinates ? (
+        <>
+          <a
+            class="btn btn--map"
+            href={googleMapsHref(coordinates.lat, coordinates.lng)}
+            target="_blank"
+            rel="noopener"
+          >
+            Google Yol Tarifi
+          </a>
+          <a
+            class="btn btn--map"
+            href={yandexMapsHref(coordinates.lat, coordinates.lng)}
+            target="_blank"
+            rel="noopener"
+          >
+            Yandex
+          </a>
+        </>
+      ) : (
+        <a
+          class="btn btn--map"
+          href={googleSearchHref(mapQuery)}
+          target="_blank"
+          rel="noopener"
+        >
+          Haritada Ara
+        </a>
+      )
+    }
+  </div>
+</article>

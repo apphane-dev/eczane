@@ -1,0 +1,100 @@
+---
+import type { Pharmacy } from "../lib/types";
+
+interface Props {
+  pharmacies: Pharmacy[];
+}
+
+const { pharmacies } = Astro.props;
+
+// Only pharmacies with coordinates can be placed on the map.
+const points = pharmacies
+  .filter((p) => p.coordinates)
+  .map((p) => ({
+    name: p.name,
+    address: p.address,
+    phone: p.phone,
+    lat: p.coordinates!.lat,
+    lng: p.coordinates!.lng,
+  }));
+---
+
+<div class="map" id="map" aria-label="Nöbetçi eczaneler haritası" role="application">
+</div>
+<script id="map-data" type="application/json" set:html={JSON.stringify(points)} />
+
+<script>
+  import maplibregl from "maplibre-gl";
+  import "maplibre-gl/dist/maplibre-gl.css";
+  import {
+    telHref,
+    formatPhone,
+    googleMapsHref,
+  } from "../lib/pharmacy";
+
+  interface Point {
+    name: string;
+    address: string;
+    phone: string | null;
+    lat: number;
+    lng: number;
+  }
+
+  const el = document.getElementById("map");
+  const dataEl = document.getElementById("map-data");
+  if (!el || !dataEl) throw new Error("Map container missing");
+
+  const points: Point[] = JSON.parse(dataEl.textContent || "[]");
+
+  const map = new maplibregl.Map({
+    container: el,
+    style: "https://tiles.openfreemap.org/styles/liberty",
+    center: [30.7, 36.88],
+    zoom: 10,
+    attributionControl: { compact: true },
+  });
+
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  map.addControl(
+    new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+      showUserLocation: true,
+    }),
+    "top-right",
+  );
+
+  const esc = (s: string) =>
+    s.replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] || c,
+    );
+
+  map.on("load", () => {
+    const bounds = new maplibregl.LngLatBounds();
+
+    for (const p of points) {
+      const phoneRow = p.phone
+        ? `<a href="${telHref(p.phone)}">📞 ${esc(formatPhone(p.phone))}</a>`
+        : "";
+      const popup = new maplibregl.Popup({ offset: 24, maxWidth: "260px" }).setHTML(
+        `<div class="popup">
+          <strong>${esc(p.name)}</strong>
+          <span>${esc(p.address)}</span>
+          ${phoneRow}
+          <a href="${googleMapsHref(p.lat, p.lng)}" target="_blank" rel="noopener">Yol Tarifi →</a>
+        </div>`,
+      );
+
+      new maplibregl.Marker({ color: "#c62828" })
+        .setLngLat([p.lng, p.lat])
+        .setPopup(popup)
+        .addTo(map);
+
+      bounds.extend([p.lng, p.lat]);
+    }
+
+    if (!bounds.isEmpty()) {
+      map.fitBounds(bounds, { padding: 48, maxZoom: 14, duration: 0 });
+    }
+  });
+</script>

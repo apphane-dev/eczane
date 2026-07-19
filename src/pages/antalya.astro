@@ -1,0 +1,188 @@
+---
+import type { CityData } from "../lib/types";
+import { groupByDistrict, formatUpdatedAt } from "../lib/pharmacy";
+import { getCity } from "../lib/cities";
+import PharmacyCard from "../components/PharmacyCard.astro";
+import MapView from "../components/MapView.astro";
+import antalyaData from "../data/antalya.json";
+import "../styles/global.css";
+
+const data = antalyaData as CityData;
+const city = getCity("antalya")!;
+const groups = groupByDistrict(data.pharmacies);
+const updated = formatUpdatedAt(data.updatedAt);
+const total = data.pharmacies.length;
+---
+
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content={`${city.name} nöbetçi eczaneler — adres, telefon ve yol tarifi.`}
+    />
+    <title>{city.name} Nöbetçi Eczaneler</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <h1 class="site-header__title">
+          <span class="cross" aria-hidden="true">+</span>
+          {city.name} Nöbetçi Eczaneler
+        </h1>
+        <p class="site-header__sub">
+          Şu anda görevli {total} eczane
+        </p>
+        <p class="site-header__meta">Son güncelleme: {updated}</p>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="toolbar__inner">
+        <div class="toggle" role="group" aria-label="Görünüm seçimi">
+          <button id="view-list-btn" aria-pressed="true">Liste</button>
+          <button id="view-map-btn" aria-pressed="false">Harita</button>
+        </div>
+        <button id="locate-btn" class="btn-locate">
+          <span aria-hidden="true">📍</span> Bana en yakını bul
+        </button>
+      </div>
+    </div>
+
+    <main>
+      <section id="view-list" class="view" aria-label="Eczane listesi">
+        {
+          groups.map((group) => (
+            <div class="district">
+              <div class="district__head">
+                <h2 class="district__name">{group.district}</h2>
+                <span class="district__count">{group.pharmacies.length}</span>
+              </div>
+              <div class="cards">
+                {group.pharmacies.map((pharmacy) => (
+                  <PharmacyCard pharmacy={pharmacy} />
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <section id="view-map" class="view" hidden aria-label="Harita görünümü">
+        <MapView pharmacies={data.pharmacies} />
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Veriler {city.name} Eczacı Odası kaynaklıdır. Acil durumda eczaneyi
+        arayarak teyit ediniz.
+      </p>
+    </footer>
+
+    <script>
+      // --- View toggle ---
+      const listBtn = document.getElementById("view-list-btn")!;
+      const mapBtn = document.getElementById("view-map-btn")!;
+      const listView = document.getElementById("view-list")!;
+      const mapView = document.getElementById("view-map")!;
+
+      function setView(view: "list" | "map") {
+        const isMap = view === "map";
+        listView.hidden = isMap;
+        mapView.hidden = !isMap;
+        listBtn.setAttribute("aria-pressed", String(!isMap));
+        mapBtn.setAttribute("aria-pressed", String(isMap));
+        // Nudge MapLibre to recompute size when it becomes visible.
+        window.dispatchEvent(new Event("resize"));
+      }
+
+      listBtn.addEventListener("click", () => setView("list"));
+      mapBtn.addEventListener("click", () => setView("map"));
+
+      // --- Geolocation distance (haversine) ---
+      function haversineKm(
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number,
+      ): number {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) ** 2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      }
+
+      const locateBtn = document.getElementById(
+        "locate-btn",
+      ) as HTMLButtonElement;
+
+      const kmFmt = new Intl.NumberFormat("tr-TR", {
+        style: "unit",
+        unit: "kilometer",
+        maximumFractionDigits: 1,
+      });
+
+      function applyDistances(lat: number, lng: number) {
+        const cards = Array.from(
+          document.querySelectorAll<HTMLElement>(".card"),
+        );
+        for (const card of cards) {
+          const clat = parseFloat(card.dataset.lat || "");
+          const clng = parseFloat(card.dataset.lng || "");
+          const row = card.querySelector<HTMLElement>(".card__distance");
+          const value = card.querySelector<HTMLElement>(".card__distance-value");
+          if (Number.isNaN(clat) || Number.isNaN(clng) || !row || !value) {
+            continue;
+          }
+          const d = haversineKm(lat, lng, clat, clng);
+          value.textContent = `${kmFmt.format(d)} uzaklıkta`;
+          row.hidden = false;
+          card.dataset.distance = String(d);
+        }
+        // Sort cards within each district by distance.
+        for (const container of Array.from(
+          document.querySelectorAll<HTMLElement>(".cards"),
+        )) {
+          const sorted = Array.from(
+            container.querySelectorAll<HTMLElement>(".card"),
+          ).sort(
+            (a, b) =>
+              parseFloat(a.dataset.distance || "Infinity") -
+              parseFloat(b.dataset.distance || "Infinity"),
+          );
+          sorted.forEach((c) => container.appendChild(c));
+        }
+      }
+
+      locateBtn.addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          locateBtn.textContent = "Konum desteklenmiyor";
+          locateBtn.disabled = true;
+          return;
+        }
+        locateBtn.disabled = true;
+        locateBtn.textContent = "Konum alınıyor…";
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            applyDistances(pos.coords.latitude, pos.coords.longitude);
+            locateBtn.textContent = "Mesafeye göre sıralandı";
+          },
+          () => {
+            locateBtn.disabled = false;
+            locateBtn.textContent = "Konum alınamadı, tekrar dene";
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 },
+        );
+      });
+    </script>
+  </body>
+</html>
