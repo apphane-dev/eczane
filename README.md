@@ -5,11 +5,11 @@ with [Astro](https://astro.build). Pharmacy data is scraped daily from official
 provincial chamber of pharmacists pages and committed as static JSON, so the
 deployed site needs no backend.
 
-Prior art / credit: the scraping approach (selectors, parsing logic) is ported
-from [guria/eczaneleri](https://github.com/guria/eczaneleri), a Gleam scraper
-for the same Antalya source page using headless Chrome. This project uses a
-plain `fetch` + [cheerio](https://cheerio.js.org/) instead, since the source
-pages turned out to be server-rendered and don't require JS execution.
+The scraping approach (selectors, parsing logic) is ported from the earlier
+Gleam implementation on this repository's `main` branch, a scraper for the same
+Antalya source page using headless Chrome. This version uses a plain `fetch` +
+[cheerio](https://cheerio.js.org/) instead, since the source pages turned out
+to be server-rendered and don't require JS execution.
 
 ## Project structure
 
