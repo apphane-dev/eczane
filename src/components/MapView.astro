@@ -216,6 +216,14 @@ const points = ordered.map((p) => ({
   }
   const entries: Entry[] = [];
   const cards = Array.from(cardsEl.querySelectorAll<HTMLElement>(".mapcard"));
+  // Remember the original (list-order) card sequence so nearest mode can be
+  // reverted exactly when the user leaves it.
+  const originalCardOrder = cards.slice();
+
+  // Shared nearest-mode state. `pendingNearest` holds coordinates that arrived
+  // (e.g. from the list's find-me button) before the markers finished loading.
+  let mapNearestActive = false;
+  let pendingNearest: { lat: number; lng: number } | null = null;
 
   let activeIdx = -1;
   // Suppress the scroll->map feedback loop while we scroll programmatically.
@@ -259,6 +267,67 @@ const points = ordered.map((p) => ({
     }
   }
 
+  // Reorder cards nearest-first, fill in distances, and select the closest.
+  // Does not re-broadcast; callers decide whether to notify the list view.
+  function applyNearest(lat: number, lng: number) {
+    if (entries.length === 0) {
+      pendingNearest = { lat, lng };
+      return;
+    }
+    const ranked = entries
+      .map((entry) => ({
+        entry,
+        d: haversineKm(lat, lng, entry.lat, entry.lng),
+      }))
+      .sort((a, b) => a.d - b.d);
+
+    for (const { entry, d } of ranked) {
+      const row = entry.card.querySelector<HTMLElement>(".mapcard__distance");
+      const val = entry.card.querySelector<HTMLElement>(
+        ".mapcard__distance-value",
+      );
+      if (row && val) {
+        val.textContent = `${kmFmt.format(d)} ${distanceSuffix}`;
+        row.hidden = false;
+      }
+      cardsEl.appendChild(entry.card);
+    }
+
+    mapNearestActive = true;
+    if (ranked[0]) {
+      const idx = entries.indexOf(ranked[0].entry);
+      setActive(idx, { scroll: true, fly: true });
+    }
+  }
+
+  // Restore the original list order and hide the distance rows.
+  function resetNearest() {
+    for (const card of originalCardOrder) {
+      const row = card.querySelector<HTMLElement>(".mapcard__distance");
+      if (row) row.hidden = true;
+      cardsEl.appendChild(card);
+    }
+    mapNearestActive = false;
+    pendingNearest = null;
+  }
+
+  // Mirror nearest mode toggled from the list's find-me button. Ignore our own
+  // broadcasts (source "map") to avoid a feedback loop.
+  window.addEventListener("nearest:sync", (ev) => {
+    const d = (ev as CustomEvent).detail as {
+      active: boolean;
+      lat?: number;
+      lng?: number;
+      source: string;
+    };
+    if (d.source === "map") return;
+    if (d.active && d.lat != null && d.lng != null) {
+      applyNearest(d.lat, d.lng);
+    } else if (!d.active) {
+      resetNearest();
+    }
+  });
+
   map.on("load", () => {
     const bounds = new maplibregl.LngLatBounds();
     const markerColor =
@@ -284,6 +353,13 @@ const points = ordered.map((p) => ({
 
     if (!bounds.isEmpty()) {
       map.fitBounds(bounds, { padding: 60, maxZoom: 14, duration: 0 });
+    }
+
+    // Apply nearest ordering requested before the markers were ready.
+    if (pendingNearest) {
+      const { lat, lng } = pendingNearest;
+      pendingNearest = null;
+      applyNearest(lat, lng);
     }
   });
 
@@ -339,32 +415,21 @@ const points = ordered.map((p) => ({
     });
   });
 
-  // When the user shares location, reorder cards by distance (nearest first).
+  // When the user shares location via the map's own control, reorder cards by
+  // distance and tell the list view so nearest mode stays in sync across tabs.
   geolocate.on("geolocate", (e: { coords: GeolocationCoordinates }) => {
     const { latitude, longitude } = e.coords;
-    const ranked = entries
-      .map((entry) => ({
-        entry,
-        d: haversineKm(latitude, longitude, entry.lat, entry.lng),
-      }))
-      .sort((a, b) => a.d - b.d);
-
-    for (const { entry, d } of ranked) {
-      const row = entry.card.querySelector<HTMLElement>(".mapcard__distance");
-      const val = entry.card.querySelector<HTMLElement>(
-        ".mapcard__distance-value",
-      );
-      if (row && val) {
-        val.textContent = `${kmFmt.format(d)} ${distanceSuffix}`;
-        row.hidden = false;
-      }
-      cardsEl.appendChild(entry.card);
-    }
-
-    if (ranked[0]) {
-      const idx = entries.indexOf(ranked[0].entry);
-      setActive(idx, { scroll: true, fly: true });
-    }
+    applyNearest(latitude, longitude);
+    window.dispatchEvent(
+      new CustomEvent("nearest:sync", {
+        detail: {
+          active: true,
+          lat: latitude,
+          lng: longitude,
+          source: "map",
+        },
+      }),
+    );
   });
 
   // Recompute size when the map view becomes visible.

@@ -314,8 +314,10 @@ const runtimeStrings = {
         return ranked.map((r) => r.card);
       }
 
-      // Flatten into a single city-wide distance-ordered list.
-      function enterNearest(lat: number, lng: number) {
+      // Flatten into a single city-wide distance-ordered list. `broadcast`
+      // controls whether the shared nearest-mode event is emitted (false when
+      // we are reacting to that event coming from the map).
+      function enterNearest(lat: number, lng: number, broadcast = true) {
         const sorted = setDistances(lat, lng);
         for (const card of sorted) nearestCards.appendChild(card);
         nearestCount.textContent = String(sorted.length);
@@ -326,10 +328,17 @@ const runtimeStrings = {
         locateBtn.innerHTML = locateIcon + S.showGrouped;
         locateBtn.setAttribute("aria-pressed", "true");
         statusEl.textContent = S.nearestAnnounce;
+        if (broadcast) {
+          window.dispatchEvent(
+            new CustomEvent("nearest:sync", {
+              detail: { active: true, lat, lng, source: "list" },
+            }),
+          );
+        }
       }
 
       // Restore the district grouping in its original order.
-      function exitNearest() {
+      function exitNearest(broadcast = true) {
         for (const { card, parent } of cardHome) {
           const row = card.querySelector<HTMLElement>(".card__distance");
           if (row) row.hidden = true;
@@ -341,7 +350,31 @@ const runtimeStrings = {
         locateBtn.innerHTML = locateIcon + S.locate;
         locateBtn.setAttribute("aria-pressed", "false");
         statusEl.textContent = S.groupedAnnounce;
+        if (broadcast) {
+          window.dispatchEvent(
+            new CustomEvent("nearest:sync", {
+              detail: { active: false, source: "list" },
+            }),
+          );
+        }
       }
+
+      // Keep the list in sync when nearest mode is toggled from the map's own
+      // geolocate control. Ignore our own broadcasts to avoid a feedback loop.
+      window.addEventListener("nearest:sync", (ev) => {
+        const d = (ev as CustomEvent).detail as {
+          active: boolean;
+          lat?: number;
+          lng?: number;
+          source: string;
+        };
+        if (d.source === "list") return;
+        if (d.active && !nearestActive && d.lat != null && d.lng != null) {
+          enterNearest(d.lat, d.lng, false);
+        } else if (!d.active && nearestActive) {
+          exitNearest(false);
+        }
+      });
 
       locateBtn.setAttribute("aria-pressed", "false");
       locateBtn.addEventListener("click", () => {
