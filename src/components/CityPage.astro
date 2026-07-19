@@ -50,8 +50,28 @@ const runtimeStrings = {
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={t.metaDescription} />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#1a4c3f" />
+    <meta
+      name="theme-color"
+      content="#f7f3ec"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0c1420"
+      media="(prefers-color-scheme: dark)"
+    />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -100,8 +120,9 @@ const runtimeStrings = {
             }
           </nav>
         </div>
-        <p class="site-header__sub">{t.onDutyCount(total)}</p>
-        <p class="site-header__meta">{t.lastUpdated}: {updated}</p>
+        <p class="site-header__meta">
+          {t.onDutyCount(total)} · {t.lastUpdated}: {updated}
+        </p>
       </div>
     </header>
 
@@ -112,7 +133,22 @@ const runtimeStrings = {
           <button id="view-map-btn" aria-pressed="false">{t.viewMap}</button>
         </div>
         <button id="locate-btn" class="btn-locate">
-          <span aria-hidden="true">📍</span> {t.locate}
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 2v3M12 19v3M2 12h3M19 12h3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span class="btn-locate__label">{t.locate}</span>
         </button>
       </div>
     </div>
@@ -232,7 +268,11 @@ const runtimeStrings = {
       const nearestCards = document.getElementById("nearest-cards")!;
       const nearestCount = document.getElementById("nearest-count")!;
       const statusEl = document.getElementById("status")!;
-      const locateIcon = '<span aria-hidden="true">📍</span> ';
+      const locateIcon =
+        '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+        '<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>' +
+        '<path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+        "</svg> ";
 
       const kmFmt = new Intl.NumberFormat(S.intlLocale, {
         style: "unit",

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Nöbetçi Eczane">
-  <rect x="16" y="16" width="480" height="480" rx="104" fill="#1a4c3f"/>
+  <rect x="16" y="16" width="480" height="480" rx="104" fill="#d81e28"/>
   <g fill="#ffffff">
     <rect x="216" y="120" width="80" height="272" rx="20"/>
     <rect x="120" y="216" width="272" height="80" rx="20"/>

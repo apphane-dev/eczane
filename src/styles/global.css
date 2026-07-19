@@ -1,82 +1,74 @@
 /* =========================================================================
-   Design tokens — one refined pharmacy-green brand hue (deep, desaturated
-   teal-pine), tinted neutrals, and a single semantic red reserved for
-   "no location data" / emergency meaning. Everything below derives from
-   these; no raw hex values live outside this block.
+   "Nöbet / Night Watch" — a design grounded in the Turkish eczane.
+   The subject is the illuminated red NÖBETÇİ ECZANE sign you scan a dark
+   street for. So red is the functional signal color: it belongs only to the
+   action you take (Call) and the glowing header sign-mark — never spread as
+   decoration. Day = warm travertine limestone; night = tinted Antalya-sea
+   navy (deliberately not neutral near-black). Two faces: Bricolage Grotesque
+   for display, Instrument Sans for body; phone numbers set tabular.
    ========================================================================= */
 :root {
-  /* Brand scale (hue ~163) */
-  --brand-50: #edf5f1;
-  --brand-100: #d6e8e0;
-  --brand-200: #aed2c4;
-  --brand-300: #7fb4a2;
-  --brand-400: #4f9280;
-  --brand-500: #327563;
-  --brand-600: #215f4e;
-  --brand-700: #1a4c3f;
-  --brand-800: #143c32;
-  --brand-900: #0e2b24;
+  /* Signal red — the pharmacy sign (TEB). */
+  --sign-red: #d81e28;
+  --sign-red-deep: #a5141c;
+  --sign-red-bright: #ff5a63;
 
-  /* Semantic roles */
-  --accent: var(--brand-600);
-  --accent-hover: var(--brand-700);
-  --accent-contrast: #ffffff;
-  --accent-soft: var(--brand-50);
-  --accent-soft-text: var(--brand-700);
+  /* Warm limestone daytime surfaces. */
+  --paper: #f7f3ec;
+  --card: #ffffff;
+  --ink: #201a17;
+  --muted: #736a62;
+  --line: #e7dfd3;
 
-  --ink: #16211c;
-  --muted: #4b5b53;
-  --surface: #f4f8f6;
-  --surface-2: #ffffff;
-  --line: #e1e8e4;
-  --toolbar-bg: color-mix(in srgb, var(--surface) 85%, transparent);
+  /* Semantic roles (light) */
+  --surface: var(--paper);
+  --surface-2: var(--card);
+  --accent: var(--sign-red-deep); /* icons/text on light: AA on paper */
+  --accent-fill: var(--sign-red); /* filled buttons */
+  --accent-fill-hover: var(--sign-red-deep);
+  --on-accent: #ffffff;
+  --accent-soft: #fbeceb;
+  --accent-soft-text: var(--sign-red-deep);
+  --warn: #b0741a; /* pharmacy without a mappable location */
 
-  --danger: #b3261e;
-  --danger-soft: #f7e4e2;
-  --danger-contrast: #ffffff;
+  --header-bg: #fffdfa;
+  --header-line: var(--line);
+  --toolbar-bg: color-mix(in srgb, var(--paper) 82%, transparent);
+  --focus: var(--sign-red);
+  --glow: rgba(216, 30, 40, 0.32);
+  --marker: #d81e28; /* literal so JS getPropertyValue resolves */
 
-  --header-from: var(--brand-700);
-  --header-to: var(--brand-900);
-  --header-text: #ffffff;
-  --on-header-soft: rgba(255, 255, 255, 0.16);
-
-  --focus: var(--brand-500);
-  --marker: #215f4e; /* literal (== brand-600) so JS getPropertyValue resolves */
-
-  --radius: 14px;
-  --shadow: 0 1px 2px rgba(14, 43, 36, 0.06), 0 6px 20px rgba(14, 43, 36, 0.06);
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(45, 30, 20, 0.06);
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --accent: var(--brand-500);
-    --accent-hover: var(--brand-400);
-    --accent-contrast: #ffffff;
-    --accent-soft: #1b2c26;
-    --accent-soft-text: var(--brand-200);
+    /* Antalya midnight — deep navy sea, tinted on purpose. */
+    --surface: #0c1420;
+    --surface-2: #14202f;
+    --ink: #f1ece3;
+    --muted: #93a0b0;
+    --line: #24334a;
 
-    --ink: #e7efeb;
-    --muted: #9db0a7;
-    --surface: #0f1613;
-    --surface-2: #172420;
-    --line: #29352f;
-    --toolbar-bg: color-mix(in srgb, var(--surface) 82%, transparent);
+    --accent: var(--sign-red-bright); /* icons/text glow on navy */
+    --accent-fill: #e0323b;
+    --accent-fill-hover: #f04651;
+    --on-accent: #ffffff;
+    --accent-soft: #2a1620;
+    --accent-soft-text: #ff8a90;
+    --warn: #dca24c;
 
-    --danger: #f0a49c;
-    --danger-soft: #3a1512;
-    --danger-contrast: #ffffff;
+    --header-bg: #0e1826;
+    --header-line: #24334a;
+    --toolbar-bg: color-mix(in srgb, #0c1420 80%, transparent);
+    --focus: var(--sign-red-bright);
+    --glow: rgba(255, 90, 99, 0.5);
 
-    --header-from: var(--brand-800);
-    --header-to: #0a201a;
-    --header-text: #eef5f2;
-    --on-header-soft: rgba(255, 255, 255, 0.1);
-
-    --focus: var(--brand-300);
-    --marker: #4f9280; /* literal (== brand-400) */
-
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 22px rgba(0, 0, 0, 0.45);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -93,24 +85,25 @@ body {
   font-family: var(--font);
   color: var(--ink);
   background: var(--surface);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 a {
-  color: var(--accent-hover);
+  color: var(--accent);
 }
 
 :focus-visible {
-  outline: 3px solid var(--focus);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* ---- Header ---- */
+/* ---- Header (compact app bar) ---- */
 .site-header {
-  background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
-  color: var(--header-text);
-  padding: 1.1rem 1rem 1.2rem;
+  background: var(--header-bg);
+  color: var(--ink);
+  border-bottom: 1px solid var(--header-line);
+  padding: 0.5rem 1rem 0.55rem;
 }
 
 .site-header__inner {
@@ -118,79 +111,93 @@ a {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.1rem;
 }
 
 .site-header__top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .site-header__title {
   margin: 0;
-  font-size: 1.5rem;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .lang {
   display: inline-flex;
-  gap: 2px;
-  background: var(--on-header-soft);
+  gap: 1px;
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 3px;
+  padding: 2px;
   flex: none;
 }
 
 .lang__link {
-  color: var(--header-text);
+  color: var(--muted);
   text-decoration: none;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  padding: 0.25rem 0.55rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  opacity: 0.82;
 }
 
 .lang__link--active {
-  background: var(--surface-2);
-  color: var(--accent-hover);
-  opacity: 1;
+  background: var(--accent-fill);
+  color: var(--on-accent);
 }
 
-.lang__link:hover {
-  opacity: 1;
-}
-
+/* Signature: the glowing night-duty sign-mark. */
 .cross {
+  position: relative;
   display: inline-grid;
   place-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  background: var(--surface-2);
-  border-radius: 6px;
-  color: var(--accent);
-  font-weight: 900;
-  font-size: 1.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--accent-fill);
+  border-radius: 7px;
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
   line-height: 1;
   flex: none;
+  box-shadow: 0 0 0 1px var(--accent-fill), 0 0 12px -1px var(--glow);
 }
 
-.site-header__sub {
-  margin: 0;
-  font-size: 0.95rem;
-  opacity: 0.92;
+@media (prefers-reduced-motion: no-preference) {
+  .cross {
+    animation: on-watch 3.4s ease-in-out infinite;
+  }
+}
+
+@keyframes on-watch {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px var(--accent-fill), 0 0 8px -2px var(--glow);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--accent-fill), 0 0 18px 1px var(--glow);
+  }
 }
 
 .site-header__meta {
-  margin: 0.15rem 0 0;
-  font-size: 0.8rem;
-  opacity: 0.85;
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- Toolbar ---- */
@@ -201,7 +208,7 @@ a {
   background: var(--toolbar-bg);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
-  padding: 0.6rem 1rem;
+  padding: 0.45rem 1rem;
 }
 
 .toolbar__inner {
@@ -209,7 +216,7 @@ a {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
   align-items: center;
   justify-content: space-between;
 }
@@ -219,7 +226,7 @@ a {
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 3px;
+  padding: 2px;
   gap: 2px;
 }
 
@@ -230,26 +237,26 @@ a {
   color: var(--muted);
   font: inherit;
   font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.9rem;
   border-radius: 999px;
   cursor: pointer;
 }
 
 .toggle button[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--accent-fill);
+  color: var(--on-accent);
 }
 
 .btn-locate {
   appearance: none;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--accent-fill);
   background: var(--surface-2);
-  color: var(--accent-hover);
+  color: var(--accent);
   font: inherit;
   font-weight: 600;
-  font-size: 0.9rem;
-  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 999px;
   cursor: pointer;
   display: inline-flex;
@@ -257,14 +264,16 @@ a {
   gap: 0.4rem;
 }
 
-.btn-locate:hover {
-  background: var(--accent);
-  color: var(--accent-contrast);
+.btn-locate svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
 }
 
+.btn-locate:hover,
 .btn-locate[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--accent-contrast);
+  background: var(--accent-fill);
+  color: var(--on-accent);
 }
 
 .btn-locate[disabled] {
@@ -276,7 +285,7 @@ a {
 main {
   max-width: 960px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.7rem 1rem 1rem;
 }
 
 .view[hidden] {
@@ -284,35 +293,37 @@ main {
 }
 
 .district {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.9rem;
 }
 
 .district__head {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  margin: 0 0 0.7rem;
-  padding-bottom: 0.35rem;
-  border-bottom: 2px solid var(--accent);
+  gap: 0.45rem;
+  margin: 0 0 0.45rem;
+  padding-bottom: 0.22rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .district__name {
   margin: 0;
-  font-size: 1.15rem;
-  color: var(--accent-hover);
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
 .district__count {
-  font-size: 0.8rem;
-  color: var(--accent-soft-text);
-  background: var(--accent-soft);
-  border-radius: 999px;
-  padding: 0.1rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .cards {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.45rem;
   grid-template-columns: 1fr;
 }
 
@@ -322,19 +333,13 @@ main {
   }
 }
 
-/* ---- Card ---- */
+/* ---- Card (compact) ---- */
 .card {
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  padding: 0.6rem 0.7rem;
   box-shadow: var(--shadow);
-  padding: 0.9rem 1rem 1rem;
-  border-left: 4px solid var(--accent);
-}
-
-/* Red survives only where it carries meaning: no map coordinates. */
-.card--no-coords {
-  border-left-color: var(--danger);
 }
 
 .card__head {
@@ -342,24 +347,28 @@ main {
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.15rem;
 }
 
 .card__name {
   margin: 0;
-  font-size: 1.02rem;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 /* District badge: only meaningful in the flat, city-wide nearest list. */
 .card__district {
   display: none;
   flex: none;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.68rem;
+  font-weight: 600;
   color: var(--accent-soft-text);
   background: var(--accent-soft);
   border-radius: 999px;
-  padding: 0.1rem 0.5rem;
+  padding: 0.05rem 0.45rem;
   white-space: nowrap;
 }
 
@@ -380,36 +389,43 @@ main {
 }
 
 .card__address {
-  margin: 0 0 0.7rem;
+  margin: 0 0 0.5rem;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .card__distance {
-  margin: 0 0 0.7rem;
-  font-size: 0.85rem;
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  color: var(--accent-hover);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hidden until geolocation fills it (beats any display rule). */
+.card__distance[hidden] {
+  display: none;
 }
 
 .card__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 0.35rem;
 }
 
+/* Base chip */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.35rem;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 0.4rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.34rem 0.6rem;
+  border-radius: 9px;
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--ink);
@@ -420,69 +436,83 @@ main {
   border-color: var(--accent);
 }
 
-/* Primary action: call. */
+.btn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+/* Primary action: Call — filled with the sign red, number set tabular. */
 .btn--call {
-  background: var(--accent);
-  color: var(--accent-contrast);
-  border-color: var(--accent);
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  border-color: var(--accent-fill);
+  flex: 1 1 auto;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
 .btn--call:hover {
-  border-color: var(--accent-hover);
-  background: var(--accent-hover);
+  background: var(--accent-fill-hover);
+  border-color: var(--accent-fill-hover);
 }
 
-/* Understated on-brand treatment (no clashing bright green). */
-.btn--whatsapp {
-  background: var(--accent-soft);
-  color: var(--accent-soft-text);
-  border-color: transparent;
+/* Icon-only chips (WhatsApp, directions) — square, quiet ink glyphs. */
+.btn--icon {
+  padding: 0.34rem;
+  width: 2rem;
+  color: var(--muted);
 }
 
-.btn--map {
-  color: var(--accent-hover);
+.btn--icon:hover {
+  color: var(--accent);
+}
+
+.btn--search {
+  color: var(--accent);
 }
 
 /* ---- Map ---- */
 .map {
   width: 100%;
-  height: calc(100vh - 210px);
+  height: calc(100vh - 190px);
   min-height: 420px;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
-  box-shadow: var(--shadow);
 }
 
 .popup strong {
   display: block;
-  font-size: 0.95rem;
-  margin-bottom: 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  margin-bottom: 0.15rem;
   color: var(--ink);
 }
 
 .popup span {
   display: block;
   color: var(--muted);
-  font-size: 0.8rem;
-  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  margin-bottom: 0.35rem;
 }
 
 .popup a {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  margin-top: 0.15rem;
-  color: var(--accent-hover);
+  margin-top: 0.1rem;
+  color: var(--accent);
 }
 
 .maplibregl-popup-content {
   border-radius: 10px;
-  padding: 0.7rem 0.85rem;
+  padding: 0.65rem 0.8rem;
   font-family: var(--font);
   background: var(--surface-2);
   color: var(--ink);
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .maplibregl-popup-anchor-top .maplibregl-popup-tip {
@@ -501,10 +531,10 @@ main {
 /* ---- Footer ---- */
 .site-footer {
   max-width: 960px;
-  margin: 1rem auto 2rem;
+  margin: 0.75rem auto 1.5rem;
   padding: 0 1rem;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 
