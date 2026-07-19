@@ -1,18 +1,83 @@
+/* =========================================================================
+   Design tokens — one refined pharmacy-green brand hue (deep, desaturated
+   teal-pine), tinted neutrals, and a single semantic red reserved for
+   "no location data" / emergency meaning. Everything below derives from
+   these; no raw hex values live outside this block.
+   ========================================================================= */
 :root {
-  --green: #1b7a4b;
-  --green-dark: #0f5834;
-  --red: #c62828;
-  --red-dark: #9c1f1f;
-  --ink: #17211c;
-  --muted: #5c6b63;
-  --line: #e2e8e4;
-  --bg: #f6f8f6;
-  --card: #ffffff;
-  --whatsapp: #25d366;
+  /* Brand scale (hue ~163) */
+  --brand-50: #edf5f1;
+  --brand-100: #d6e8e0;
+  --brand-200: #aed2c4;
+  --brand-300: #7fb4a2;
+  --brand-400: #4f9280;
+  --brand-500: #327563;
+  --brand-600: #215f4e;
+  --brand-700: #1a4c3f;
+  --brand-800: #143c32;
+  --brand-900: #0e2b24;
+
+  /* Semantic roles */
+  --accent: var(--brand-600);
+  --accent-hover: var(--brand-700);
+  --accent-contrast: #ffffff;
+  --accent-soft: var(--brand-50);
+  --accent-soft-text: var(--brand-700);
+
+  --ink: #16211c;
+  --muted: #4b5b53;
+  --surface: #f4f8f6;
+  --surface-2: #ffffff;
+  --line: #e1e8e4;
+  --toolbar-bg: color-mix(in srgb, var(--surface) 85%, transparent);
+
+  --danger: #b3261e;
+  --danger-soft: #f7e4e2;
+  --danger-contrast: #ffffff;
+
+  --header-from: var(--brand-700);
+  --header-to: var(--brand-900);
+  --header-text: #ffffff;
+  --on-header-soft: rgba(255, 255, 255, 0.16);
+
+  --focus: var(--brand-500);
+  --marker: #215f4e; /* literal (== brand-600) so JS getPropertyValue resolves */
+
   --radius: 14px;
-  --shadow: 0 1px 2px rgba(23, 33, 28, 0.06), 0 6px 20px rgba(23, 33, 28, 0.05);
+  --shadow: 0 1px 2px rgba(14, 43, 36, 0.06), 0 6px 20px rgba(14, 43, 36, 0.06);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: var(--brand-500);
+    --accent-hover: var(--brand-400);
+    --accent-contrast: #ffffff;
+    --accent-soft: #1b2c26;
+    --accent-soft-text: var(--brand-200);
+
+    --ink: #e7efeb;
+    --muted: #9db0a7;
+    --surface: #0f1613;
+    --surface-2: #172420;
+    --line: #29352f;
+    --toolbar-bg: color-mix(in srgb, var(--surface) 82%, transparent);
+
+    --danger: #f0a49c;
+    --danger-soft: #3a1512;
+    --danger-contrast: #ffffff;
+
+    --header-from: var(--brand-800);
+    --header-to: #0a201a;
+    --header-text: #eef5f2;
+    --on-header-soft: rgba(255, 255, 255, 0.1);
+
+    --focus: var(--brand-300);
+    --marker: #4f9280; /* literal (== brand-400) */
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 22px rgba(0, 0, 0, 0.45);
+  }
 }
 
 * {
@@ -27,24 +92,24 @@ body {
   margin: 0;
   font-family: var(--font);
   color: var(--ink);
-  background: var(--bg);
+  background: var(--surface);
   line-height: 1.5;
 }
 
 a {
-  color: var(--green-dark);
+  color: var(--accent-hover);
 }
 
 :focus-visible {
-  outline: 3px solid var(--green);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 /* ---- Header ---- */
 .site-header {
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
+  color: var(--header-text);
   padding: 1.1rem 1rem 1.2rem;
 }
 
@@ -75,26 +140,26 @@ a {
 .lang {
   display: inline-flex;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--on-header-soft);
   border-radius: 999px;
   padding: 3px;
   flex: none;
 }
 
 .lang__link {
-  color: #fff;
+  color: var(--header-text);
   text-decoration: none;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  opacity: 0.85;
+  opacity: 0.82;
 }
 
 .lang__link--active {
-  background: #fff;
-  color: var(--green-dark);
+  background: var(--surface-2);
+  color: var(--accent-hover);
   opacity: 1;
 }
 
@@ -107,9 +172,9 @@ a {
   place-items: center;
   width: 1.6rem;
   height: 1.6rem;
-  background: #fff;
+  background: var(--surface-2);
   border-radius: 6px;
-  color: var(--red);
+  color: var(--accent);
   font-weight: 900;
   font-size: 1.2rem;
   line-height: 1;
@@ -133,7 +198,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(246, 248, 246, 0.92);
+  background: var(--toolbar-bg);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
   padding: 0.6rem 1rem;
@@ -151,7 +216,7 @@ a {
 
 .toggle {
   display: inline-flex;
-  background: #fff;
+  background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 3px;
@@ -172,15 +237,15 @@ a {
 }
 
 .toggle button[aria-pressed="true"] {
-  background: var(--green);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 
 .btn-locate {
   appearance: none;
-  border: 1px solid var(--green);
-  background: #fff;
-  color: var(--green-dark);
+  border: 1px solid var(--accent);
+  background: var(--surface-2);
+  color: var(--accent-hover);
   font: inherit;
   font-weight: 600;
   font-size: 0.9rem;
@@ -193,8 +258,13 @@ a {
 }
 
 .btn-locate:hover {
-  background: var(--green);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn-locate[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 
 .btn-locate[disabled] {
@@ -223,19 +293,19 @@ main {
   gap: 0.5rem;
   margin: 0 0 0.7rem;
   padding-bottom: 0.35rem;
-  border-bottom: 2px solid var(--green);
+  border-bottom: 2px solid var(--accent);
 }
 
 .district__name {
   margin: 0;
   font-size: 1.15rem;
-  color: var(--green-dark);
+  color: var(--accent-hover);
 }
 
 .district__count {
   font-size: 0.8rem;
-  color: var(--muted);
-  background: #e7f1eb;
+  color: var(--accent-soft-text);
+  background: var(--accent-soft);
   border-radius: 999px;
   padding: 0.1rem 0.55rem;
 }
@@ -254,12 +324,17 @@ main {
 
 /* ---- Card ---- */
 .card {
-  background: var(--card);
+  background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0.9rem 1rem 1rem;
-  border-left: 4px solid var(--red);
+  border-left: 4px solid var(--accent);
+}
+
+/* Red survives only where it carries meaning: no map coordinates. */
+.card--no-coords {
+  border-left-color: var(--danger);
 }
 
 .card__head {
@@ -281,8 +356,8 @@ main {
   flex: none;
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--green-dark);
-  background: #e7f1eb;
+  color: var(--accent-soft-text);
+  background: var(--accent-soft);
   border-radius: 999px;
   padding: 0.1rem 0.5rem;
   white-space: nowrap;
@@ -314,7 +389,7 @@ main {
   margin: 0 0 0.7rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--green-dark);
+  color: var(--accent-hover);
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -336,29 +411,36 @@ main {
   padding: 0.4rem 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface-2);
   color: var(--ink);
   white-space: nowrap;
 }
 
 .btn:hover {
-  border-color: var(--green);
+  border-color: var(--accent);
 }
 
+/* Primary action: call. */
 .btn--call {
-  background: var(--green);
-  color: #fff;
-  border-color: var(--green);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
 }
 
+.btn--call:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+/* Understated on-brand treatment (no clashing bright green). */
 .btn--whatsapp {
-  background: var(--whatsapp);
-  color: #05391a;
-  border-color: var(--whatsapp);
+  background: var(--accent-soft);
+  color: var(--accent-soft-text);
+  border-color: transparent;
 }
 
 .btn--map {
-  color: var(--green-dark);
+  color: var(--accent-hover);
 }
 
 /* ---- Map ---- */
@@ -376,6 +458,7 @@ main {
   display: block;
   font-size: 0.95rem;
   margin-bottom: 0.2rem;
+  color: var(--ink);
 }
 
 .popup span {
@@ -390,12 +473,29 @@ main {
   font-size: 0.85rem;
   font-weight: 600;
   margin-top: 0.15rem;
+  color: var(--accent-hover);
 }
 
 .maplibregl-popup-content {
   border-radius: 10px;
   padding: 0.7rem 0.85rem;
   font-family: var(--font);
+  background: var(--surface-2);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: var(--surface-2);
+}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: var(--surface-2);
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--surface-2);
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--surface-2);
 }
 
 /* ---- Footer ---- */

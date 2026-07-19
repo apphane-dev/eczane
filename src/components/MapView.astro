@@ -94,7 +94,12 @@ const points = pharmacies
         </div>`,
       );
 
-      new maplibregl.Marker({ color: "#c62828" })
+      const markerColor =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--marker")
+          .trim() || "#215f4e";
+
+      new maplibregl.Marker({ color: markerColor })
         .setLngLat([p.lng, p.lat])
         .setPopup(popup)
         .addTo(map);

@@ -22,7 +22,7 @@ const mapQuery = `${name} ${address}`;
 ---
 
 <article
-  class="card"
+  class:list={["card", { "card--no-coords": !coordinates }]}
   data-name={name}
   data-address={address}
   data-phone={phone ?? ""}
