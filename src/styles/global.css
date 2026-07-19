@@ -262,9 +262,46 @@ main {
   border-left: 4px solid var(--red);
 }
 
-.card__name {
+.card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin: 0 0 0.3rem;
+}
+
+.card__name {
+  margin: 0;
   font-size: 1.02rem;
+}
+
+/* District badge: only meaningful in the flat, city-wide nearest list. */
+.card__district {
+  display: none;
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  background: #e7f1eb;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+
+#nearest-cards .card__district {
+  display: inline-block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .card__address {

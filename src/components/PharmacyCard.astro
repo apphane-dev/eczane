@@ -29,7 +29,10 @@ const mapQuery = `${name} ${address}`;
   data-lat={coordinates?.lat ?? ""}
   data-lng={coordinates?.lng ?? ""}
 >
-  <h3 class="card__name">{name}</h3>
+  <div class="card__head">
+    <h3 class="card__name">{name}</h3>
+    <span class="card__district">{pharmacy.district}</span>
+  </div>
   <p class="card__address">{address}</p>
 
   <p class="card__distance" hidden>

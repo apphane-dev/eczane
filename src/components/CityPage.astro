@@ -31,10 +31,14 @@ const site = Astro.site?.origin ?? "";
 const runtimeStrings = {
   intlLocale: getIntlLocale(locale),
   distanceSuffix: t.distanceSuffix,
+  locate: t.locate,
   locating: t.locating,
   locateSorted: t.locateSorted,
   locateFailed: t.locateFailed,
   locateUnsupported: t.locateUnsupported,
+  showGrouped: t.showGrouped,
+  nearestAnnounce: t.nearestAnnounce(total),
+  groupedAnnounce: t.groupedAnnounce,
 };
 ---
 
@@ -114,22 +118,32 @@ const runtimeStrings = {
     </div>
 
     <main>
+      <p id="status" class="sr-only" role="status" aria-live="polite"></p>
       <section id="view-list" class="view" aria-label={t.listAriaLabel}>
-        {
-          groups.map((group) => (
-            <div class="district">
-              <div class="district__head">
-                <h2 class="district__name">{group.district}</h2>
-                <span class="district__count">{group.pharmacies.length}</span>
+        <div id="grouped">
+          {
+            groups.map((group) => (
+              <div class="district">
+                <div class="district__head">
+                  <h2 class="district__name">{group.district}</h2>
+                  <span class="district__count">{group.pharmacies.length}</span>
+                </div>
+                <div class="cards">
+                  {group.pharmacies.map((pharmacy) => (
+                    <PharmacyCard pharmacy={pharmacy} t={t} />
+                  ))}
+                </div>
               </div>
-              <div class="cards">
-                {group.pharmacies.map((pharmacy) => (
-                  <PharmacyCard pharmacy={pharmacy} t={t} />
-                ))}
-              </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
+        <div id="nearest" hidden>
+          <div class="district__head">
+            <h2 class="district__name">{t.nearestHeading}</h2>
+            <span class="district__count" id="nearest-count"></span>
+          </div>
+          <div class="cards" id="nearest-cards"></div>
+        </div>
       </section>
 
       <section id="view-map" class="view" hidden aria-label={t.mapAriaLabel}>
@@ -159,10 +173,14 @@ const runtimeStrings = {
       interface RuntimeStrings {
         intlLocale: string;
         distanceSuffix: string;
+        locate: string;
         locating: string;
         locateSorted: string;
         locateFailed: string;
         locateUnsupported: string;
+        showGrouped: string;
+        nearestAnnounce: string;
+        groupedAnnounce: string;
       }
 
       const S: RuntimeStrings = JSON.parse(
@@ -209,6 +227,12 @@ const runtimeStrings = {
       const locateBtn = document.getElementById(
         "locate-btn",
       ) as HTMLButtonElement;
+      const groupedEl = document.getElementById("grouped")!;
+      const nearestEl = document.getElementById("nearest")!;
+      const nearestCards = document.getElementById("nearest-cards")!;
+      const nearestCount = document.getElementById("nearest-count")!;
+      const statusEl = document.getElementById("status")!;
+      const locateIcon = '<span aria-hidden="true">📍</span> ';
 
       const kmFmt = new Intl.NumberFormat(S.intlLocale, {
         style: "unit",
@@ -216,54 +240,85 @@ const runtimeStrings = {
         maximumFractionDigits: 1,
       });
 
-      function applyDistances(lat: number, lng: number) {
-        const cards = Array.from(
-          document.querySelectorAll<HTMLElement>(".card"),
-        );
-        for (const card of cards) {
+      // Remember each card's home district container and DOM order so the
+      // grouped view can be restored exactly when nearest mode is cleared.
+      const cardHome = Array.from(
+        groupedEl.querySelectorAll<HTMLElement>(".card"),
+      ).map((card) => ({ card, parent: card.parentElement! }));
+
+      let nearestActive = false;
+
+      function setDistances(lat: number, lng: number): HTMLElement[] {
+        const ranked: { card: HTMLElement; d: number }[] = [];
+        for (const { card } of cardHome) {
           const clat = parseFloat(card.dataset.lat || "");
           const clng = parseFloat(card.dataset.lng || "");
           const row = card.querySelector<HTMLElement>(".card__distance");
           const value = card.querySelector<HTMLElement>(".card__distance-value");
           if (Number.isNaN(clat) || Number.isNaN(clng) || !row || !value) {
+            // No coordinates: sort such cards to the end.
+            ranked.push({ card, d: Infinity });
             continue;
           }
           const d = haversineKm(lat, lng, clat, clng);
           value.textContent = `${kmFmt.format(d)} ${S.distanceSuffix}`;
           row.hidden = false;
           card.dataset.distance = String(d);
+          ranked.push({ card, d });
         }
-        // Sort cards within each district by distance.
-        for (const container of Array.from(
-          document.querySelectorAll<HTMLElement>(".cards"),
-        )) {
-          const sorted = Array.from(
-            container.querySelectorAll<HTMLElement>(".card"),
-          ).sort(
-            (a, b) =>
-              parseFloat(a.dataset.distance || "Infinity") -
-              parseFloat(b.dataset.distance || "Infinity"),
-          );
-          sorted.forEach((c) => container.appendChild(c));
-        }
+        ranked.sort((a, b) => a.d - b.d);
+        return ranked.map((r) => r.card);
       }
 
+      // Flatten into a single city-wide distance-ordered list.
+      function enterNearest(lat: number, lng: number) {
+        const sorted = setDistances(lat, lng);
+        for (const card of sorted) nearestCards.appendChild(card);
+        nearestCount.textContent = String(sorted.length);
+        groupedEl.hidden = true;
+        nearestEl.hidden = false;
+        nearestActive = true;
+        locateBtn.disabled = false;
+        locateBtn.innerHTML = locateIcon + S.showGrouped;
+        locateBtn.setAttribute("aria-pressed", "true");
+        statusEl.textContent = S.nearestAnnounce;
+      }
+
+      // Restore the district grouping in its original order.
+      function exitNearest() {
+        for (const { card, parent } of cardHome) {
+          const row = card.querySelector<HTMLElement>(".card__distance");
+          if (row) row.hidden = true;
+          parent.appendChild(card);
+        }
+        nearestEl.hidden = true;
+        groupedEl.hidden = false;
+        nearestActive = false;
+        locateBtn.innerHTML = locateIcon + S.locate;
+        locateBtn.setAttribute("aria-pressed", "false");
+        statusEl.textContent = S.groupedAnnounce;
+      }
+
+      locateBtn.setAttribute("aria-pressed", "false");
       locateBtn.addEventListener("click", () => {
+        if (nearestActive) {
+          exitNearest();
+          return;
+        }
         if (!navigator.geolocation) {
           locateBtn.textContent = S.locateUnsupported;
           locateBtn.disabled = true;
           return;
         }
         locateBtn.disabled = true;
-        locateBtn.textContent = S.locating;
+        locateBtn.innerHTML = locateIcon + S.locating;
         navigator.geolocation.getCurrentPosition(
           (pos) => {
-            applyDistances(pos.coords.latitude, pos.coords.longitude);
-            locateBtn.textContent = S.locateSorted;
+            enterNearest(pos.coords.latitude, pos.coords.longitude);
           },
           () => {
             locateBtn.disabled = false;
-            locateBtn.textContent = S.locateFailed;
+            locateBtn.innerHTML = locateIcon + S.locateFailed;
           },
           { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 },
         );

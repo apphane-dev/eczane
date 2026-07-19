@@ -26,6 +26,14 @@ export interface Strings {
   locateSorted: string;
   locateFailed: string;
   locateUnsupported: string;
+  /** Button label to leave nearest mode and restore district grouping. */
+  showGrouped: string;
+  /** Heading above the flat distance-ordered list. */
+  nearestHeading: string;
+  /** Polite live-region announcement after sorting. */
+  nearestAnnounce: (n: number) => string;
+  /** Announcement when district grouping is restored. */
+  groupedAnnounce: string;
   /** Suffix after a distance value, e.g. "3.2 km away". */
   distanceSuffix: string;
   call: string;
@@ -58,6 +66,10 @@ export const translations: Record<Locale, Strings> = {
     locateSorted: "Mesafeye göre sıralandı",
     locateFailed: "Konum alınamadı, tekrar dene",
     locateUnsupported: "Konum desteklenmiyor",
+    showGrouped: "İlçelere göre grupla",
+    nearestHeading: "Size en yakın eczaneler",
+    nearestAnnounce: (n) => `${n} eczane mesafeye göre sıralandı`,
+    groupedAnnounce: "Eczaneler yeniden ilçelere göre gruplandı",
     distanceSuffix: "uzaklıkta",
     call: "Ara",
     whatsapp: "WhatsApp",
@@ -88,6 +100,10 @@ export const translations: Record<Locale, Strings> = {
     locateSorted: "Sorted by distance",
     locateFailed: "Couldn't get location, try again",
     locateUnsupported: "Location not supported",
+    showGrouped: "Group by district",
+    nearestHeading: "Pharmacies nearest to you",
+    nearestAnnounce: (n) => `${n} pharmacies sorted by distance`,
+    groupedAnnounce: "Pharmacies grouped by district again",
     distanceSuffix: "away",
     call: "Call",
     whatsapp: "WhatsApp",
@@ -118,6 +134,10 @@ export const translations: Record<Locale, Strings> = {
     locateSorted: "Отсортировано по расстоянию",
     locateFailed: "Не удалось определить, попробуйте ещё раз",
     locateUnsupported: "Геолокация не поддерживается",
+    showGrouped: "Сгруппировать по районам",
+    nearestHeading: "Ближайшие к вам аптеки",
+    nearestAnnounce: (n) => `${n} аптек отсортированы по расстоянию`,
+    groupedAnnounce: "Аптеки снова сгруппированы по районам",
     distanceSuffix: "от вас",
     call: "Позвонить",
     whatsapp: "WhatsApp",
