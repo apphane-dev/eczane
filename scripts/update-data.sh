@@ -17,5 +17,8 @@ if [ -n "$(git status --porcelain -- src/data/)" ]; then
   git add src/data/
   printf 'chore: update pharmacy data\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>\n' \
     | git commit -F -
-  git push origin main
+  # Production source lives on `astro` (legacy `main` is the Gleam scraper).
+  # Override with ECZANE_DATA_BRANCH if that ever changes.
+  target_branch="${ECZANE_DATA_BRANCH:-astro}"
+  git push origin "HEAD:${target_branch}"
 fi

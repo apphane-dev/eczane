@@ -81,6 +81,7 @@ const runtimeStrings = {
     />
     <meta name="apple-mobile-web-app-title" content="Eczane" />
     <title>{t.pageTitle}</title>
+    <link rel="canonical" href={`${site}${cityPath(locale)}`} />
     {
       locales.map((loc) => (
         <link
