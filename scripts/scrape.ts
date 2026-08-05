@@ -3,11 +3,12 @@
  *
  * Usage: npm run scrape -- <city-slug>
  *
- * Ports the parsing logic from the prior art at
- * https://github.com/guria/eczaneleri (a Gleam scraper of the same source
- * pages using headless Chrome). A plain `fetch` + cheerio was verified to be
- * sufficient here -- the on-duty pharmacy list is server-rendered HTML, no
- * client-side JS rendering is required.
+ * Ports the parsing logic from the prior art — the Gleam scraper on this
+ * repo's `main` branch (https://github.com/apphane-dev/eczane, formerly
+ * guria/eczaneleri), which scrapes the same source pages using headless
+ * Chrome. A plain `fetch` + cheerio was verified to be sufficient here --
+ * the on-duty pharmacy list is server-rendered HTML, no client-side JS
+ * rendering is required.
  */
 import * as cheerio from "cheerio";
 import { mkdir, writeFile } from "node:fs/promises";
