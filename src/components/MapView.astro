@@ -225,8 +225,9 @@ const points = ordered.map((p) => ({
   let pendingNearest: { lat: number; lng: number } | null = null;
 
   let activeIdx = -1;
-  // Suppress the scroll->select feedback loop while we scroll programmatically.
-  let suppressScroll = 0;
+  // True while we center a card programmatically, so the swipe handler can
+  // ignore the resulting scroll events instead of re-selecting mid-animation.
+  let programmaticScroll = false;
   // The horizontal carousel (mobile) selects on swipe; the vertical sidebar
   // (desktop, ≥820px) selects only on explicit click/focus.
   const desktopMq = window.matchMedia("(min-width: 820px)");
@@ -250,7 +251,7 @@ const points = ordered.map((p) => ({
     cur.marker.getElement().classList.add("map-marker--active");
 
     if (opts.scroll) {
-      suppressScroll = performance.now();
+      programmaticScroll = true;
       cur.card.scrollIntoView({
         behavior: "smooth",
         inline: "center",
@@ -392,13 +393,17 @@ const points = ordered.map((p) => ({
     });
   });
 
+  // Once a programmatic centering finishes, stop ignoring scroll events.
+  cardsEl.addEventListener("scrollend", () => {
+    programmaticScroll = false;
+  });
+
   // On the mobile horizontal carousel, swiping selects the centered card and
   // flies the map to it. The desktop vertical sidebar ignores scroll and only
   // changes the active card on explicit click/focus.
   let scrollRaf = 0;
   cardsEl.addEventListener("scroll", () => {
-    if (desktopMq.matches) return;
-    if (performance.now() - suppressScroll < 700) return;
+    if (desktopMq.matches || programmaticScroll) return;
     if (scrollRaf) return;
     scrollRaf = requestAnimationFrame(() => {
       scrollRaf = 0;
