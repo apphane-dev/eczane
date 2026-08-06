@@ -40,6 +40,9 @@
 
   --radius: 12px;
   --shadow: 0 1px 2px rgba(45, 30, 20, 0.06);
+  /* Shared with .district__head so section titles line up with card text. */
+  --card-pad-x: 0.7rem;
+  --card-pad-y: 0.6rem;
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -316,7 +319,8 @@ main {
   align-items: baseline;
   gap: 0.45rem;
   margin: 0 0 0.45rem;
-  padding-bottom: 0.22rem;
+  /* Card text sits inside 1px border + --card-pad-x; match that inset. */
+  padding: 0 calc(var(--card-pad-x) + 1px) 0.22rem;
   border-bottom: 1px solid var(--line);
 }
 
@@ -353,7 +357,7 @@ main {
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 0.6rem 0.7rem;
+  padding: var(--card-pad-y) var(--card-pad-x);
   box-shadow: var(--shadow);
 }
 
