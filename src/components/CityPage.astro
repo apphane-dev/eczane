@@ -289,6 +289,10 @@ const runtimeStrings = {
         mapView.hidden = !isMap;
         listBtn.setAttribute("aria-pressed", String(!isMap));
         mapBtn.setAttribute("aria-pressed", String(isMap));
+        // On mobile, the map view is a full-height flex column with no page
+        // scroll (see body.map-view in global.css); the list view keeps normal
+        // document flow. The class is inert above 819px.
+        document.body.classList.toggle("map-view", isMap);
         // Nudge MapLibre to recompute size when it becomes visible.
         window.dispatchEvent(new Event("resize"));
       }

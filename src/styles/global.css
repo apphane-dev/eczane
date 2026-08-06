@@ -541,6 +541,46 @@ main {
   position: relative;
 }
 
+/* ---- Mobile map view: fill the screen, never overflow the footer ----
+   On phones the map must fit between the real header/toolbar and footer.
+   A fixed calc(100vh - Npx) can't do that: the toolbar wraps taller on
+   narrow screens, so no single N fits both a 390px and a 320px phone, and
+   the 460px map min-height blows straight past the viewport on small ones.
+   Instead, when the map view is active (body.map-view, toggled by setView)
+   the page becomes a 100dvh flex column and the map flexes to fill exactly
+   the space left by the header/toolbar/footer — so the page can't scroll
+   past the footer. Desktop (>= 820px) keeps its sidebar layout untouched. */
+@media (max-width: 819px) {
+  body.map-view {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* fallback for browsers without dvh */
+    height: 100dvh; /* accounts for mobile browser chrome */
+    overflow: hidden;
+  }
+
+  body.map-view .site-header,
+  body.map-view .toolbar,
+  body.map-view .site-footer {
+    flex: none;
+  }
+
+  body.map-view main {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  body.map-view #view-map {
+    height: 100%;
+  }
+
+  body.map-view .map-shell,
+  body.map-view .map {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
 .map {
   width: 100%;
   height: var(--map-h);
