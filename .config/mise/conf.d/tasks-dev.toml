@@ -1,0 +1,3 @@
+[tasks.dev]
+description = "Start the Astro development server (binds localhost:4322 by default)"
+run = "npm run dev"
