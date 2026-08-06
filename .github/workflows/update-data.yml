@@ -1,0 +1,55 @@
+name: Update pharmacy data
+
+on:
+  schedule:
+    - cron: "10 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: update-pharmacy-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Scrape pharmacy data
+        run: npm run scrape -- antalya
+
+      - name: Commit changed data
+        id: commit
+        run: |
+          if git diff --quiet -- src/data/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Pharmacy data is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/
+          git commit -m "chore: update pharmacy data"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy updated site
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
