@@ -225,9 +225,6 @@ const points = ordered.map((p) => ({
   let pendingNearest: { lat: number; lng: number } | null = null;
 
   let activeIdx = -1;
-  // True while we center a card programmatically, so the swipe handler can
-  // ignore the resulting scroll events instead of re-selecting mid-animation.
-  let programmaticScroll = false;
   // The horizontal carousel (mobile) selects on swipe; the vertical sidebar
   // (desktop, ≥820px) selects only on explicit click/focus.
   const desktopMq = window.matchMedia("(min-width: 820px)");
@@ -251,7 +248,6 @@ const points = ordered.map((p) => ({
     cur.marker.getElement().classList.add("map-marker--active");
 
     if (opts.scroll) {
-      programmaticScroll = true;
       cur.card.scrollIntoView({
         behavior: "smooth",
         inline: "center",
@@ -393,38 +389,30 @@ const points = ordered.map((p) => ({
     });
   });
 
-  // Once a programmatic centering finishes, stop ignoring scroll events.
+  // On the mobile horizontal carousel, swiping settles on a card and flies the
+  // map to it. We react only once the scroll comes to rest — that's the card
+  // the user meant — so a programmatic scrollIntoView (which also fires the
+  // settled position) just re-selects the already-active card, a harmless no-op.
+  // The desktop vertical sidebar ignores this and selects on click/focus only.
   cardsEl.addEventListener("scrollend", () => {
-    programmaticScroll = false;
-  });
-
-  // On the mobile horizontal carousel, swiping selects the centered card and
-  // flies the map to it. The desktop vertical sidebar ignores scroll and only
-  // changes the active card on explicit click/focus.
-  let scrollRaf = 0;
-  cardsEl.addEventListener("scroll", () => {
-    if (desktopMq.matches || programmaticScroll) return;
-    if (scrollRaf) return;
-    scrollRaf = requestAnimationFrame(() => {
-      scrollRaf = 0;
-      const r = cardsEl.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      let best = -1;
-      let bestDist = Infinity;
-      entries.forEach((e, i) => {
-        const cr = e.card.getBoundingClientRect();
-        const d = Math.hypot(
-          cr.left + cr.width / 2 - cx,
-          cr.top + cr.height / 2 - cy,
-        );
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
-        }
-      });
-      if (best >= 0 && best !== activeIdx) setActive(best, { fly: true });
+    if (desktopMq.matches) return;
+    const r = cardsEl.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    let best = -1;
+    let bestDist = Infinity;
+    entries.forEach((e, i) => {
+      const cr = e.card.getBoundingClientRect();
+      const d = Math.hypot(
+        cr.left + cr.width / 2 - cx,
+        cr.top + cr.height / 2 - cy,
+      );
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
     });
+    if (best >= 0 && best !== activeIdx) setActive(best, { fly: true });
   });
 
   // When the user shares location via the map's own control, reorder cards by
