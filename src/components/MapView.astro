@@ -394,7 +394,7 @@ const points = ordered.map((p) => ({
   // the user meant — so a programmatic scrollIntoView (which also fires the
   // settled position) just re-selects the already-active card, a harmless no-op.
   // The desktop vertical sidebar ignores this and selects on click/focus only.
-  cardsEl.addEventListener("scrollend", () => {
+  function syncActiveToScrollPosition() {
     if (desktopMq.matches) return;
     const r = cardsEl.getBoundingClientRect();
     const cx = r.left + r.width / 2;
@@ -413,7 +413,22 @@ const points = ordered.map((p) => ({
       }
     });
     if (best >= 0 && best !== activeIdx) setActive(best, { fly: true });
-  });
+  }
+
+  cardsEl.addEventListener("scrollend", syncActiveToScrollPosition);
+
+  // Fallback for browsers without scrollend support.
+  if (!("onscrollend" in window)) {
+    let scrollTimeout: number | undefined;
+    cardsEl.addEventListener("scroll", () => {
+      if (scrollTimeout !== undefined) {
+        window.clearTimeout(scrollTimeout);
+      }
+      scrollTimeout = window.setTimeout(() => {
+        syncActiveToScrollPosition();
+      }, 120);
+    });
+  }
 
   // When the user shares location via the map's own control, reorder cards by
   // distance and tell the list view so nearest mode stays in sync across tabs.
