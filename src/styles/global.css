@@ -400,66 +400,10 @@ main {
 }
 
 .card__address {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.45rem;
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.35;
-}
-
-/* Secondary contact row: a quiet tel: line plus an optional WhatsApp chip.
-   Sits below the address and above the equal-weight directions buttons. */
-.card__contact {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0 0 0.5rem;
-}
-
-/* Demoted phone: number stays as tabular text so it never competes with the
-   primary directions actions and rows stay a uniform grid. Sized a step
-   above the address — a phone number is a primary way to confirm a pharmacy —
-   while staying below the pharmacy name. */
-.card__phone {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.36rem;
-  color: var(--accent);
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-decoration: none;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.01em;
-}
-
-/* WhatsApp: a quiet secondary contact glyph, not a directions action. */
-.card__wa {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--muted);
-}
-
-.card__wa svg {
-  width: 15px;
-  height: 15px;
-}
-
-.card__wa:hover {
-  color: var(--accent);
-}
-
-.card__phone svg {
-  width: 15px;
-  height: 15px;
-  flex: none;
-  opacity: 0.85;
-}
-
-.card__phone:hover .card__phone-num {
-  text-decoration: underline;
 }
 
 .card__distance {
@@ -475,28 +419,65 @@ main {
   display: none;
 }
 
+/* Two columns: call group (2fr) | directions (1fr). WhatsApp is a sibling
+   chip inside the left column, so the gap before directions stays identical
+   with or without it. Phone is outline; directions is the filled signal. */
 .card__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 0.4rem;
+  align-items: stretch;
+  margin-top: auto;
+}
+
+.card__call {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem;
+  align-items: stretch;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.card__call:empty {
+  visibility: hidden;
+}
+
+.card__call .btn--action {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  justify-content: flex-start;
+  padding-inline: 0.6rem 0.5rem;
+  /* Outline phone: number stays scannable, directions keeps the red fill. */
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.card__call .btn--action:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* Base chip */
 .btn {
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
+  font: inherit;
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 0.34rem 0.6rem;
-  border-radius: 9px;
+  padding: 0.42rem 0.55rem;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--ink);
   white-space: nowrap;
+  cursor: pointer;
+  min-width: 0;
 }
 
 .btn:hover {
@@ -504,32 +485,51 @@ main {
 }
 
 .btn svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   flex: none;
 }
 
-/* Primary actions: the three map providers get identical weight — Google,
-   Yandex and OSM are equal choices, so they share one filled style and split
-   the row into equal thirds for a calm, uniform rhythm. */
-.btn--go {
+.btn__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filled primary — used for directions (and any standalone action). */
+.btn--action {
+  width: 100%;
   background: var(--accent-fill);
   color: var(--on-accent);
   border-color: var(--accent-fill);
-  flex: 1 1 0;
-  min-width: 0;
-  padding-inline: 0.4rem;
   letter-spacing: 0.01em;
 }
 
-.btn--go:hover {
+.btn--action:hover {
   background: var(--accent-fill-hover);
   border-color: var(--accent-fill-hover);
 }
 
-.btn--go svg {
-  width: 13px;
-  height: 13px;
+/* WhatsApp: quiet outline sibling in the call column. */
+.btn--icon {
+  flex: 0 0 2.15rem;
+  width: 2.15rem;
+  padding-inline: 0;
+  color: var(--accent);
+  background: transparent;
+  border-color: var(--accent);
+}
+
+.btn--icon:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn--icon svg {
+  width: 15px;
+  height: 15px;
 }
 
 /* ---- Map + docked cards ---- */
@@ -638,10 +638,6 @@ main {
   overflow: hidden;
 }
 
-.mapcard .card__phone {
-  margin: 0;
-}
-
 .mapcard__distance {
   margin: 0 0 0.3rem;
   font-size: 0.76rem;
@@ -714,4 +710,192 @@ main {
   color: var(--muted);
   text-align: center;
   padding: 2rem 0;
+}
+
+/* ---- Card rhythm -------------------------------------------------------
+   Keep each content band aligned across a district row: long addresses no
+   longer move the action row independently. Subgrid shares the four card
+   bands across columns; the regular grid declaration is the fallback. */
+.card {
+  display: grid;
+  grid-template-areas:
+    "head"
+    "address"
+    "distance"
+    "actions";
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  align-content: stretch;
+  gap: 0;
+}
+
+.card__head {
+  grid-area: head;
+}
+
+.card__address {
+  grid-area: address;
+  margin-bottom: 0.35rem;
+}
+
+.card__distance {
+  grid-area: distance;
+  margin-bottom: 0.45rem;
+}
+
+.card__actions {
+  grid-area: actions;
+  align-self: end;
+}
+
+@media (min-width: 620px) {
+  .cards {
+    grid-auto-rows: auto;
+    align-items: stretch;
+  }
+
+  @supports (grid-template-rows: subgrid) {
+    .cards {
+      grid-template-rows: repeat(4, auto);
+    }
+
+    .card {
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+    }
+  }
+}
+
+/* ---- Directions picker (bottom sheet / modal) ---- */
+.sheet {
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: inherit;
+}
+
+.sheet::backdrop {
+  background: rgba(20, 14, 10, 0.42);
+}
+
+.sheet__panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -12px 40px rgba(20, 14, 10, 0.18);
+  padding: 0.45rem 0.85rem calc(0.9rem + env(safe-area-inset-bottom, 0px));
+}
+
+.sheet__handle {
+  width: 2.4rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: var(--line);
+  margin: 0.15rem auto 0.55rem;
+}
+
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.sheet__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sheet__close {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sheet__close:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.sheet__options {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.sheet__option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.7rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.sheet__option:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (min-width: 620px) {
+  .sheet__panel {
+    top: 50%;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    width: min(92vw, 380px);
+    transform: translate(-50%, -50%);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 48px rgba(20, 14, 10, 0.22);
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .sheet__handle {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .sheet::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .sheet__panel {
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  @media (min-width: 620px) {
+    .sheet__panel {
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+    }
+  }
 }
