@@ -1,11 +1,32 @@
 ---
 // Single-city site for now; send visitors straight to Antalya.
 // Designed to become a city picker once more provinces are added.
+import { locales, type Locale, cityPath } from "../lib/i18n";
+
+// This page's locale.
+const here: Locale = "tr";
+// Each other locale mapped to its Antalya page; injected into the inline
+// script so it can send a returning visitor to a previously chosen language
+// (straight to the city page, avoiding a double hop through the locale root).
+const targets: Partial<Record<Locale, string>> = {};
+for (const loc of locales) {
+  if (loc !== here) targets[loc] = cityPath(loc);
+}
 ---
 
 <html lang="tr">
   <head>
     <meta charset="utf-8" />
+    <script is:inline define:vars={{ here, targets }}>
+      // Jump to a previously chosen language when it isn't this one. The
+      // meta-refresh below remains the no-JS / crawler fallback.
+      try {
+        const saved = localStorage.getItem("eczane.locale");
+        if (saved && saved !== here && targets[saved]) {
+          location.replace(targets[saved]);
+        }
+      } catch {}
+    </script>
     <meta http-equiv="refresh" content="0;url=/antalya" />
     <link rel="canonical" href="/antalya" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />

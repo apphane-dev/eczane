@@ -45,6 +45,13 @@ const runtimeStrings = {
 <html lang={t.htmlLang}>
   <head>
     <meta charset="utf-8" />
+    <script is:inline define:vars={{ locale }}>
+      // Remember the visitor's chosen language so the landing stub can
+      // redirect them back to it on future visits.
+      try {
+        localStorage.setItem("eczane.locale", locale);
+      } catch {}
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
