@@ -43,6 +43,10 @@ export interface Strings {
   directionsOsm: string;
   searchOnMap: string;
   directionsShort: string;
+  /** Title of the map-service picker opened by the directions button. */
+  directionsChooser: string;
+  /** Accessible label for closing the directions picker. */
+  close: string;
   listAriaLabel: string;
   mapAriaLabel: string;
   mapRegionLabel: string;
@@ -83,6 +87,8 @@ export const translations: Record<Locale, Strings> = {
     directionsOsm: "OpenStreetMap",
     searchOnMap: "Haritada Ara",
     directionsShort: "Yol Tarifi",
+    directionsChooser: "Harita uygulaması seç",
+    close: "Kapat",
     listAriaLabel: "Eczane listesi",
     mapAriaLabel: "Harita görünümü",
     mapRegionLabel: "Nöbetçi eczaneler haritası",
@@ -120,6 +126,8 @@ export const translations: Record<Locale, Strings> = {
     directionsOsm: "OpenStreetMap",
     searchOnMap: "Search on Map",
     directionsShort: "Directions",
+    directionsChooser: "Choose a map app",
+    close: "Close",
     listAriaLabel: "Pharmacy list",
     mapAriaLabel: "Map view",
     mapRegionLabel: "Map of on-duty pharmacies",
@@ -157,6 +165,8 @@ export const translations: Record<Locale, Strings> = {
     directionsOsm: "OpenStreetMap",
     searchOnMap: "Найти на карте",
     directionsShort: "Маршрут",
+    directionsChooser: "Выберите карту",
+    close: "Закрыть",
     listAriaLabel: "Список аптек",
     mapAriaLabel: "Вид карты",
     mapRegionLabel: "Карта дежурных аптек",

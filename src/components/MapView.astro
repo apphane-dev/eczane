@@ -5,12 +5,18 @@ import {
   groupByDistrict,
   formatPhone,
   telHref,
+  whatsappHref,
+  isMobilePhone,
   googleMapsHref,
   yandexMapsHref,
   osmHref,
 } from "../lib/pharmacy";
 
+const phonePath =
+  "M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2Z";
 const navPath = "M12 2 4 20l8-3.6L20 20 12 2Z";
+const waPath =
+  "M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.2-.2-1.1-1.5-1.1-2.8 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c0 .2.1.4 0 .5l-.4.6-.3.3c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.5.3 0 .2 0 .8-.2 1.3Z";
 
 interface Props {
   pharmacies: Pharmacy[];
@@ -75,59 +81,52 @@ const points = ordered.map((p) => ({
             <p class="mapcard__distance" hidden>
               <span class="mapcard__distance-value" />
             </p>
-            {p.phone && (
-              <a
-                class="card__phone"
-                href={telHref(p.phone)}
-                aria-label={`${t.call}: ${formatPhone(p.phone)}`}
-              >
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2Z"
-                    fill="currentColor"
-                  />
-                </svg>
-                <span class="card__phone-num">{formatPhone(p.phone)}</span>
-              </a>
-            )}
           </div>
           <div class="card__actions">
-            <a
-              class="btn btn--go"
-              href={googleMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
-              target="_blank"
-              rel="noopener"
-              aria-label={t.directionsGoogle}
+            {p.phone ? (
+              <div class="card__call">
+                <a
+                  class="btn btn--action"
+                  href={telHref(p.phone)}
+                  aria-label={`${t.call}: ${formatPhone(p.phone)}`}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d={phonePath} fill="currentColor" />
+                  </svg>
+                  <span class="btn__label">{formatPhone(p.phone)}</span>
+                </a>
+                {isMobilePhone(p.phone) && (
+                  <a
+                    class="btn btn--icon"
+                    href={whatsappHref(p.phone)}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={t.whatsapp}
+                    title={t.whatsapp}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d={waPath} fill="currentColor" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div class="card__call" aria-hidden="true" />
+            )}
+            <button
+              class="btn btn--action"
+              type="button"
+              data-directions
+              data-google={googleMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
+              data-yandex={yandexMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
+              data-osm={osmHref(p.coordinates!.lat, p.coordinates!.lng)}
+              aria-haspopup="dialog"
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d={navPath} fill="currentColor" />
               </svg>
-              Google
-            </a>
-            <a
-              class="btn btn--go"
-              href={yandexMapsHref(p.coordinates!.lat, p.coordinates!.lng)}
-              target="_blank"
-              rel="noopener"
-              aria-label={t.directionsYandex}
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d={navPath} fill="currentColor" />
-              </svg>
-              Yandex
-            </a>
-            <a
-              class="btn btn--go"
-              href={osmHref(p.coordinates!.lat, p.coordinates!.lng)}
-              target="_blank"
-              rel="noopener"
-              aria-label={t.directionsOsm}
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d={navPath} fill="currentColor" />
-              </svg>
-              OSM
-            </a>
+              <span class="btn__label">{t.directionsShort}</span>
+            </button>
           </div>
         </article>
       ))
@@ -366,14 +365,16 @@ const points = ordered.map((p) => ({
   // Card interactions: click/focus/keyboard select and sync the map.
   cards.forEach((card, i) => {
     card.addEventListener("click", (ev) => {
-      // Let action links (call/directions) behave normally.
-      if ((ev.target as HTMLElement).closest("a")) return;
+      // Let action links/buttons (call/directions) behave normally.
+      if ((ev.target as HTMLElement).closest("a, button")) return;
       setActive(i, { scroll: true, fly: true });
     });
     card.addEventListener("focus", () => setActive(i, { fly: true }));
     card.addEventListener("keydown", (ev) => {
       const k = (ev as KeyboardEvent).key;
       if (k === "Enter" || k === " ") {
+        // Let nested action buttons/links handle their own activation.
+        if ((ev.target as HTMLElement).closest("a, button")) return;
         ev.preventDefault();
         setActive(i, { scroll: true, fly: true });
       } else if (k === "ArrowRight" || k === "ArrowDown") {
