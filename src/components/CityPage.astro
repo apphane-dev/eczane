@@ -315,7 +315,13 @@ const runtimeStrings = {
 
       function closeDirections() {
         if (!directionsDialog?.open) return;
-        directionsDialog.close();
+        if (typeof directionsDialog.close === "function") {
+          directionsDialog.close();
+        } else {
+          directionsDialog.removeAttribute("open");
+          directionsTrigger?.focus();
+          directionsTrigger = null;
+        }
       }
 
       function openDirections(trigger: HTMLElement) {
@@ -366,6 +372,12 @@ const runtimeStrings = {
       directionsDialog?.addEventListener("close", () => {
         directionsTrigger?.focus();
         directionsTrigger = null;
+      });
+
+      document.addEventListener("keydown", (ev) => {
+        if (ev.key === "Escape" && directionsDialog?.open) {
+          closeDirections();
+        }
       });
 
       directionsDialog

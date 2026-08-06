@@ -373,6 +373,8 @@ const points = ordered.map((p) => ({
     card.addEventListener("keydown", (ev) => {
       const k = (ev as KeyboardEvent).key;
       if (k === "Enter" || k === " ") {
+        // Let nested action buttons/links handle their own activation.
+        if ((ev.target as HTMLElement).closest("a, button")) return;
         ev.preventDefault();
         setActive(i, { scroll: true, fly: true });
       } else if (k === "ArrowRight" || k === "ArrowDown") {
