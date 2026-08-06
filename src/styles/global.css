@@ -767,6 +767,7 @@ main {
 
 /* ---- Directions picker (bottom sheet / modal) ---- */
 .sheet {
+  display: none;
   border: none;
   padding: 0;
   margin: 0;
@@ -776,6 +777,10 @@ main {
   height: 100%;
   background: transparent;
   color: inherit;
+}
+
+.sheet[open] {
+  display: block;
 }
 
 .sheet::backdrop {
