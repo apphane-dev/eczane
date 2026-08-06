@@ -281,11 +281,15 @@ a {
   cursor: default;
 }
 
-/* ---- Main / views ---- */
+/* ---- Main / views ----
+   Match the header/toolbar content column: those put 1rem gutter on the
+   *outer* wrapper and cap the *inner* at 960px. Putting max-width and
+   horizontal padding on the same box (the previous main rule) shrank the
+   list by 2rem, so cards sat inset from the title and toolbar on desktop. */
 main {
-  max-width: 960px;
+  width: min(960px, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 0.7rem 1rem 1rem;
+  padding: 0.7rem 0 1rem;
 }
 
 .view[hidden] {
@@ -744,9 +748,9 @@ main {
 
 /* ---- Footer ---- */
 .site-footer {
-  max-width: 960px;
+  width: min(960px, calc(100% - 2rem));
   margin: 0.75rem auto 1.5rem;
-  padding: 0 1rem;
+  padding: 0;
   color: var(--muted);
   font-size: 0.75rem;
   text-align: center;
