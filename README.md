@@ -2,8 +2,8 @@
 
 A static site listing on-duty ("nöbetçi") pharmacies in Turkish provinces, built
 with [Astro](https://astro.build). Pharmacy data is scraped daily from official
-provincial chamber of pharmacists pages and committed as static JSON, so the
-deployed site needs no backend.
+provincial chamber of pharmacists pages into static JSON, so the deployed site
+needs no backend.
 
 The scraping approach (selectors, parsing logic) is ported from the earlier
 Gleam implementation on this repository's `main` branch, a scraper for the same
@@ -36,21 +36,23 @@ scripts/
 
 ## Deployment
 
-`.github/workflows/deploy.yml` builds the site and deploys `dist/` to Cloudflare
-Pages (project `eczane`) via `cloudflare/wrangler-action@v3`. It runs on push to
-`main` and can be triggered manually via `workflow_dispatch`. The workflow does
-not run the scraper — pharmacy data is committed to the repo, so the site builds
-from whatever JSON is currently in `src/data/`.
+There are two deploy workflows, both deploying `dist/` to Cloudflare Pages
+(project `eczane`) via `wrangler`:
 
-Pharmacy data is refreshed on a host machine by running `scripts/update-data.sh`,
-which re-scrapes `antalya`, commits any changes under `src/data/`, and pushes to
-`origin main`. Schedule it with cron, for example daily at 06:17:
+- **`.github/workflows/deploy.yml`** runs on push to `main` and on
+  `workflow_dispatch`. It builds and deploys only — it does not run the scraper,
+  so the site builds from whatever JSON is currently committed in `src/data/`.
 
-```
-17 6 * * * /path/to/repo/scripts/update-data.sh
-```
+- **`.github/workflows/update-data.yml`** runs daily (and on `workflow_dispatch`).
+  It scrapes fresh data into the working tree, builds, and deploys — all without
+  committing. The daily refresh therefore produces no commits on `main`; the
+  `src/data/*.json` files committed to the repo act only as a build-time
+  baseline.
 
-Each push then triggers the Cloudflare Pages deploy above.
+Both workflows use the same `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`
+secrets. To update the committed baseline (e.g. after adding a city), run
+`npm run scrape -- <slug>` locally and commit the resulting file under
+`src/data/`.
 
 ## Adding a city
 
@@ -61,5 +63,5 @@ Each push then triggers the Cloudflare Pages deploy above.
    `.ilcebas`, `.nobetciDiv` structure).
 3. Run `npm run scrape -- <slug>` and verify `src/data/<slug>.json` looks
    correct (plausible pharmacy count, mostly non-null coordinates).
-4. If you want the host-side refresh to cover the new city, add a corresponding
-   `npm run scrape -- <slug>` line to `scripts/update-data.sh`.
+4. If you want the daily CI refresh to cover the new city, add a corresponding
+   `npm run scrape -- <slug>` line to `.github/workflows/update-data.yml`.
