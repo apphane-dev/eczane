@@ -1,425 +1,431 @@
 {
   "province": "Antalya",
-  "updatedAt": "2026-08-07T07:38:36.565Z",
+  "updatedAt": "2026-08-08T07:10:28.066Z",
   "pharmacies": [
     {
-      "name": "KIYMET ECZANESİ",
-      "address": "EGITIM  ARASTIRMA HAST.KUZEYI BAYINDIR MAH.ANTALYA KOLEJI JANDARMA YOLU ÜZERI",
-      "phone": "02422382238",
+      "name": "AİLE ECZANESİ",
+      "address": "SOĞUKSU MAH. TOROSLAR CAD. NO:26/A SOĞUKSU AİLE HEKİMLİĞİ YANI MURATPAŞA",
+      "phone": "02423161522",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.8968642337,
-        "lng": 30.6726363988
+        "lat": 36.89657471197516,
+        "lng": 30.678084795945324
       }
     },
     {
-      "name": "GÜNEŞ ECZANESİ",
-      "address": "TRT (TONGUÇ) CD. TRT - GÜLLÜK KAVSAGI KENT PASTANESİ KARŞISI",
-      "phone": "02422423552",
+      "name": "DENİZ ECZANESİ",
+      "address": "ALTINDAĞ MAH.151 SOK.NO:16/C M.PAŞA (15 NOLU SAGLIK OCAGI YANI.TRT BINASI KARS.ARA SOKAGI)",
+      "phone": "02422428642",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.8944517316,
-        "lng": 30.6925699659
+        "lat": 36.8924131145591,
+        "lng": 30.691369771957397
       }
     },
     {
-      "name": "OKTAY ECZANESİ",
-      "address": "KIZILARIK MAH. KÖROĞLU BULV. YAVUZEVLERİ APT. NO:65/B ANADOLU LİSESİ MEVKİİ 32 NO'LU SAĞLIK OCAĞI YANI     MURATPAŞA",
-      "phone": "02425020446",
+      "name": "CANBEY ECZANESİ",
+      "address": "KONUKSEVER MAH. 786 SOK. İSAOĞLU APT. NO:5/A MURATPAŞA/ANTALYA",
+      "phone": "02423262255",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.903566520783436,
-        "lng": 30.727198359160994
+        "lat": 36.911384890438185,
+        "lng": 30.70484725131921
       }
     },
     {
-      "name": "ZEYNEP AKMAN ECZANESİ",
-      "address": "SİNAN MAH. CEBESOY CAD.1273 SK.NO:5/C KUMRUCU İSO CİVARI,SOLMAZ CAMİİ YANI.",
-      "phone": "02429667494",
+      "name": "PINAR ECZANESİ",
+      "address": "MEYDAN ANADOLU HASTANESI GİRİŞİ KARŞISI DR.BURHANETTIN ONAT CAD. NERGİZHAN APT.NO:20/B-C",
+      "phone": "02423124249",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.8831631709,
-        "lng": 30.7131721838
+        "lat": 36.8869556356,
+        "lng": 30.7194046745
       }
     },
     {
-      "name": "ANADOLU ECZANESİ",
-      "address": "SIRINYALI MAH. 1515 SOKAK KIRCAMI  CİVİL MAĞAZASI ARKASI  SIRINYALI AILE SAGLIGI MERKEZI KARSISI",
-      "phone": "02423163026",
+      "name": "ASLIHAN  ECZANESİ",
+      "address": "ŞİRİNYALI MAH. İSMET GÖKŞEN CADDESİ..1487 SOKAK. NO:3/B-C MURATPAŞA YAŞAM HASTANESİ KARŞISI",
+      "phone": "02429991924",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.8671411939,
-        "lng": 30.7359204122
+        "lat": 36.86339661151328,
+        "lng": 30.731987443868547
       }
     },
     {
-      "name": "YAREN ECZANESİ",
-      "address": "ÇAĞLAYAN MAH. BARINAKLAR BULV. NO:13/A MURATPAŞA ANTALYA (BEYAZ DÜNYA KAVŞAĞINDAN GÜZELOBA YÖNÜNE DOĞRU,  DENİZBANK KARŞISI)",
-      "phone": "05441980707",
+      "name": "RÜZGAR ECZANESİ",
+      "address": "ÇAĞLAYAN MAH. 2000 SOK. NO:13/A MURATPAŞA (Fener Migros arkası, Ahmet Atmaca aile sağlığı merkezi yanı)",
+      "phone": "02423238542",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.851834,
-        "lng": 30.763957
+        "lat": 36.850003331194046,
+        "lng": 30.763340860876898
       }
     },
     {
-      "name": "BARUT ECZANESİ",
-      "address": "GÜZELOBA MAH.HAVAALANI CADDESİ NO:66 MURATPAŞA  ANTALYA ( CİĞERCİ BAHATTİN YANI )",
-      "phone": "02423497707",
+      "name": "İREN ECZANESİ",
+      "address": "GÜZELOBA MAH.RAUF DENKTAŞ CAD.NO:47/A MURATPAŞA/GÜRAY MARKET BİTİŞİĞİ.ATIŞ POLİGONU KARŞISI.",
+      "phone": "05525652479",
       "province": "Antalya",
       "district": "Muratpaşa",
       "coordinates": {
-        "lat": 36.861529,
-        "lng": 30.790376
+        "lat": 36.86238283340003,
+        "lng": 30.799909383058548
       }
     },
     {
-      "name": "DİLŞAD ECZANESİ",
-      "address": "ULUS MH.RASIH KAPLAN CD.EVREN BÜFE ASAGISI MEPAS KARSISI DOKUMA",
-      "phone": "02423346173",
+      "name": "TOPKAYA ECZANESİ",
+      "address": "ÇALLI KAVSAGI DOKUMA YÖNÜ YAPIKREDI BANKASI ARKASI 14 NOLU SAGLIK OCAGI YANI",
+      "phone": "02423467281",
       "province": "Antalya",
       "district": "Kepez",
       "coordinates": {
-        "lat": 36.9091514685,
-        "lng": 30.683610623
+        "lat": 36.9083241621,
+        "lng": 30.6839152722
+      }
+    },
+    {
+      "name": "ALYA ECZANESİ",
+      "address": "ALTINOVA SİNAN MAH.ANTALYA CADDESİ.AGORA A.V.M.FAZ-2NO:14/23 KEPEZ",
+      "phone": "02425024546",
+      "province": "Antalya",
+      "district": "Kepez",
+      "coordinates": {
+        "lat": 36.91550154472504,
+        "lng": 30.771612317073505
+      }
+    },
+    {
+      "name": "FARMA HAYAT ECZANESİ",
+      "address": "GÖÇERLER MAH. HASAN HÜSNÜ ERDEM CAD. 5379 SOK. A4 BLOK NO 6C KEPEZ/ANTALYA ŞEHİR HASTANESİ ACİL KARŞISI",
+      "phone": "05075004707",
+      "province": "Antalya",
+      "district": "Kepez",
+      "coordinates": {
+        "lat": 36.954045035522455,
+        "lng": 30.665320686351045
+      }
+    },
+    {
+      "name": "KALAYCI ECZANESİ",
+      "address": "GAZİ MH.SÜTCÜLER CD.NO:73/C  11 NOLU ZEHRA KOZ SAGLIK OCAGI KARSISI",
+      "phone": "02423612210",
+      "province": "Antalya",
+      "district": "Kepez",
+      "coordinates": {
+        "lat": 36.939165079780366,
+        "lng": 30.722028160551677
+      }
+    },
+    {
+      "name": "MELDA ECZANESİ",
+      "address": "YESILYURT MAH. 75.YIL CAD. NO:69/B  KEPEZ  (KELEBEK KURS MERKEZİ ALTI)",
+      "phone": "02422275245",
+      "province": "Antalya",
+      "district": "Kepez",
+      "coordinates": {
+        "lat": 36.908972279494826,
+        "lng": 30.64779432628424
+      }
+    },
+    {
+      "name": "DAĞ ECZANESİ",
+      "address": "HURMA MAH.BOGAÇAY CAD.NO:91/A-B(ESKI SEMAZEN) URFA SULTAN SOFRASI KARSISI",
+      "phone": "02422590036",
+      "province": "Antalya",
+      "district": "Konyaaltı",
+      "coordinates": {
+        "lat": 36.8595370287,
+        "lng": 30.6048344634
+      }
+    },
+    {
+      "name": "AYSUN ECZANESİ",
+      "address": "ALTINKUM MH.460 SK.NO: 20/B ÖZEL OLIMPOS HASTANESI KARSISI",
+      "phone": "02422290443",
+      "province": "Antalya",
+      "district": "Konyaaltı",
+      "coordinates": {
+        "lat": 36.8704399995,
+        "lng": 30.633821282
+      }
+    },
+    {
+      "name": "DAL ECZANESİ",
+      "address": "DÖSEMEALTI BELEDIYESI YENIKÖY MH.ATATÜRK CD. NO:478/A",
+      "phone": "02424212147",
+      "province": "Antalya",
+      "district": "Döşemealtı",
+      "coordinates": {
+        "lat": 37.026006483261085,
+        "lng": 30.60090959072113
+      }
+    },
+    {
+      "name": "NASİP ECZANESİ",
+      "address": "ÇALKAYA MAH. BERBEROĞLU ÇARŞISI 28109 SOK. NO:8/8 AKSU",
+      "phone": "05455090059",
+      "province": "Antalya",
+      "district": "Aksu",
+      "coordinates": {
+        "lat": 36.9469599333152,
+        "lng": 30.849058851599693
+      }
+    },
+    {
+      "name": "AKÇALIOĞLU ECZANESİ",
+      "address": "SARAY MAH. YUNUS EMRE CAD. NO:4/A ALANYA",
+      "phone": "02425138645",
+      "province": "Antalya",
+      "district": "Alanya",
+      "coordinates": {
+        "lat": 36.54745227063189,
+        "lng": 31.99434533715248
+      }
+    },
+    {
+      "name": "DEFNE ECZANESİ",
+      "address": "ŞEKERHANE MH. ŞEVKET TOKUŞ CD. NO 8/A HACET KAVŞAĞI MURAT DONDURMA KARŞ. VESTEL YANI ALANYA",
+      "phone": "02425115724",
+      "province": "Antalya",
+      "district": "Alanya",
+      "coordinates": {
+        "lat": 36.547478128108025,
+        "lng": 32.00505740940571
+      }
+    },
+    {
+      "name": "EMRE ECZANESİ",
+      "address": "OBA MAH.FİDANLIK CAD.YENİ DEVLET HASTANESİ KARŞISI NO:9/B-C ALANYA",
+      "phone": "02425387472",
+      "province": "Antalya",
+      "district": "Alanya",
+      "coordinates": {
+        "lat": 36.540510557091025,
+        "lng": 32.04168253625153
+      }
+    },
+    {
+      "name": "ANILGAN ECZANESİ",
+      "address": "MAHMUTLAR MAH. 4 YOL MEVKİİ, GOLD CİTY OTEL KAVŞAĞI DORİS AYTUR OTEL KARŞISI",
+      "phone": "02425286200",
+      "province": "Antalya",
+      "district": "Alanya",
+      "coordinates": {
+        "lat": 36.4689144991632,
+        "lng": 32.11735010147095
+      }
+    },
+    {
+      "name": "NUMAN ECZANESİ",
+      "address": "KONAKLI MAH. 19.SOKAK.NO:4/A ALANYA",
+      "phone": "02425652001",
+      "province": "Antalya",
+      "district": "Alanya",
+      "coordinates": {
+        "lat": 36.59141503710927,
+        "lng": 31.85940237470163
+      }
+    },
+    {
+      "name": "YENİ IRMAK ECZANESİ",
+      "address": "MİMAR SİNAN MAH.HASAN FEHMİ BOZTEPE CAD. NO:155/A (YAŞAM HAST. KARŞISI, HİSAR TIP MERKEZİ YANI )  MANAVGAT",
+      "phone": "02427464604",
+      "province": "Antalya",
+      "district": "Manavgat",
+      "coordinates": {
+        "lat": 36.79113644289796,
+        "lng": 31.42265796661377
+      }
+    },
+    {
+      "name": "HAKAN ŞİT ECZANESİ",
+      "address": "YAYLA MAH. REMZİ GÜVEN CAD. NO:78/Z01 MANAVGAT ( İmam Hatip Lisesinden Bayıra doğru çıkan yol üzerinde) ( 0542 304 1091)",
+      "phone": "05423041091",
+      "province": "Antalya",
+      "district": "Manavgat",
+      "coordinates": {
+        "lat": 36.789960661630204,
+        "lng": 31.457331830744366
+      }
+    },
+    {
+      "name": "HAYAT ECZANESİ",
+      "address": "KARŞIYAKA MAH. İSTİKLAL CAD. 101 SOK. 1/B KORKUTELİ ANTALYA",
+      "phone": "02426435100",
+      "province": "Antalya",
+      "district": "Korkuteli",
+      "coordinates": {
+        "lat": 37.06042126405598,
+        "lng": 30.194943613167126
+      }
+    },
+    {
+      "name": "İŞLEKEL ECZANESİ",
+      "address": "HÜKÜMET CD. NO:65",
+      "phone": "02426181326",
+      "province": "Antalya",
+      "district": "Elmalı",
+      "coordinates": {
+        "lat": 36.7412926163,
+        "lng": 29.9155787751
       }
     },
     {
       "name": "DOĞA ECZANESİ",
-      "address": "EMEK MAH.2191 SOKAK. NO:1A KEPEZ (SAKARYA BULVARI, ŞEHİTLER PARKI, TRAMVAY DURAĞI AŞAĞISI, 34 NOLU SAĞLIK OCAĞI YANI)",
-      "phone": "02423263292",
-      "province": "Antalya",
-      "district": "Kepez",
-      "coordinates": {
-        "lat": 36.91761346566625,
-        "lng": 30.70853960637068
-      }
-    },
-    {
-      "name": "ŞEHİR ECZANESİ",
-      "address": "GÖÇERLER MAH. 5383 SOK. A4 BLOK NO:2A KEPEZ/ANTALYA ŞEHİR HASTANESİ KARŞISI",
-      "phone": "05402771700",
-      "province": "Antalya",
-      "district": "Kepez",
-      "coordinates": {
-        "lat": 36.95403616658656,
-        "lng": 30.664886981248856
-      }
-    },
-    {
-      "name": "YEŞİLYAYLA ECZANESİ",
-      "address": "SÜTÇÜLER MAH.GÜNEŞ CAD. NO:125/8 KEPEZ DEVLET HASTANESİ KARŞISI",
-      "phone": "02423396260",
-      "province": "Antalya",
-      "district": "Kepez",
-      "coordinates": null
-    },
-    {
-      "name": "TIKIR ECZANESİ",
-      "address": "ÜNSAL MAH. 5108 SOK.NO: 26  C BLOK D:13",
-      "phone": "02423311040",
-      "province": "Antalya",
-      "district": "Kepez",
-      "coordinates": null
-    },
-    {
-      "name": "MASAL ECZANESİ",
-      "address": "SITELER MAH. 1327 SOKAK SITELER KAPALI PAZAR YERI YAKINI  ÇILEM APT NO:28/D MAVITEK SITESI YANI",
-      "phone": "02422275767",
-      "province": "Antalya",
-      "district": "Konyaaltı",
-      "coordinates": {
-        "lat": 36.895273286,
-        "lng": 30.6339762034
-      }
-    },
-    {
-      "name": "VANİLYA ECZANESİ",
-      "address": "PINARBAŞI MAH.PINARBAŞI CAD.NO:6/A KONYAALTI ESKİ İL SAĞLIK KAVŞAĞINDAN ÜNİVERSİYEYE DÖNÜNCE .NUR PAST.YANI",
-      "phone": "02422291119",
-      "province": "Antalya",
-      "district": "Konyaaltı",
-      "coordinates": {
-        "lat": 36.88029298777223,
-        "lng": 30.65024938443126
-      }
-    },
-    {
-      "name": "ÖYKÜ ECZANESİ",
-      "address": "ALTINKALE MAH.ATATÜRK CAD.264A/AF DÖŞEMEALTI",
-      "phone": "02424432525",
-      "province": "Antalya",
-      "district": "Döşemealtı",
-      "coordinates": {
-        "lat": 37.001867217726826,
-        "lng": 30.59739589691162
-      }
-    },
-    {
-      "name": "IRMAK ECZANESİ",
-      "address": "PINARLI MAH. ATATÜRK BULVARI NO:147/C AKSU",
-      "phone": "02423456653",
-      "province": "Antalya",
-      "district": "Aksu",
-      "coordinates": {
-        "lat": 36.950645530742285,
-        "lng": 30.81379345910102
-      }
-    },
-    {
-      "name": "AYDIN ECZANESİ",
-      "address": "MAHMUTLAR MAH. BARBAROS CAD. NO:39/B ALANYA / ANTALYA",
-      "phone": "05514755197",
-      "province": "Antalya",
-      "district": "Alanya",
-      "coordinates": {
-        "lat": 36.493945,
-        "lng": 32.090993
-      }
-    },
-    {
-      "name": "FİLİZ ECZANESİ",
-      "address": "SARAY MH. KÜLTÜR CD. BASKENT HASTANESI ACIL YANI",
-      "phone": "02425130404",
-      "province": "Antalya",
-      "district": "Alanya",
-      "coordinates": {
-        "lat": 36.5465779107,
-        "lng": 31.994877266
-      }
-    },
-    {
-      "name": "SU ECZANESİ",
-      "address": "GÜLLER PINARI MAH. HASAN AKÇALIOĞLU CAD. DENİZATI APT. 25 MT YOL  ÜZERİ MİGROS KARŞISI",
-      "phone": "02425121217",
-      "province": "Antalya",
-      "district": "Alanya",
-      "coordinates": {
-        "lat": 36.547630040605696,
-        "lng": 32.01153963804245
-      }
-    },
-    {
-      "name": "EYUP ECZANESİ",
-      "address": "CİKCİLLİ SAĞLIK OCAĞI KARŞISI ALANYUM ALIŞVERİŞ MERKEZİ ÜSTÜ",
-      "phone": "02425153130",
-      "province": "Antalya",
-      "district": "Alanya",
-      "coordinates": {
-        "lat": 36.54757617095982,
-        "lng": 32.03321188688278
-      }
-    },
-    {
-      "name": "ÇAĞRICI ECZANESİ",
-      "address": "KONAKLI MAH. KEMAL ATLI SEMT POLİKLİNİĞİ ARKASI - YAVUZ ELEKTRİK YANI KONAKLI/ALANYA",
-      "phone": "02425653771",
-      "province": "Antalya",
-      "district": "Alanya",
-      "coordinates": {
-        "lat": 36.59225352347388,
-        "lng": 31.868162155151367
-      }
-    },
-    {
-      "name": "SEÇİL ECZANESİ",
-      "address": "A.Pazarci Mah.Atatürk Cad.",
-      "phone": "02427462721",
-      "province": "Antalya",
-      "district": "Manavgat",
-      "coordinates": {
-        "lat": 36.786099,
-        "lng": 31.450405
-      }
-    },
-    {
-      "name": "DUMAN ECZANESİ",
-      "address": "MİMAR SİNAN MAH. TINAZTEPE CAD. NO 24/Z03 MANAVGAT/ANTALYA (Sgk yolu üzeri Şahintepesi mevkii)",
-      "phone": "02427425743",
-      "province": "Antalya",
-      "district": "Manavgat",
-      "coordinates": {
-        "lat": 36.788097,
-        "lng": 31.423149
-      }
-    },
-    {
-      "name": "BÜYÜKYANAR ECZANESİ",
-      "address": "(DEVLET HASTANESİ KARŞISI).",
-      "phone": "02426430102",
-      "province": "Antalya",
-      "district": "Korkuteli",
-      "coordinates": {
-        "lat": 30.20326,
-        "lng": 37.08172
-      }
-    },
-    {
-      "name": "TÜRKİŞ ECZANESİ",
-      "address": "YENİ MAH. ANTALYA CADDESİ.NO:106/F  ELMALI   /ANTALYA",
-      "phone": "02426181166",
-      "province": "Antalya",
-      "district": "Elmalı",
-      "coordinates": {
-        "lat": 36.7431416852,
-        "lng": 29.9132776238
-      }
-    },
-    {
-      "name": "KAŞ DERMAN ECZANESİ",
-      "address": "KINIK MAH.GÖL CAD.KÜÇÜK SANAYİ SİTESİ E BLK.NO:30-5/1",
-      "phone": "02428454282",
+      "address": "MENTESE MH. SEHITLER CD. NO:35 KALKAN",
+      "phone": "02428441138",
       "province": "Antalya",
       "district": "Kaş",
       "coordinates": {
-        "lat": 36.3122832293,
-        "lng": 29.7402890573
+        "lat": 36.2666521677,
+        "lng": 29.4135029171
       }
     },
     {
-      "name": "BUKET ECZANESİ",
-      "address": "MENTESE MH. CUMHURIYET CD. NO:4/A KALKAN",
-      "phone": "02428443321",
+      "name": "VERESELİ KAŞ ECZANESİ",
+      "address": "HASTANE CAD. NO:5 KAŞ ANTALYA",
+      "phone": "02428361070",
       "province": "Antalya",
       "district": "Kaş",
       "coordinates": {
-        "lat": 36.2662191294,
-        "lng": 29.4133954935
+        "lat": 36.19936121344528,
+        "lng": 29.63962934911251
       }
     },
     {
-      "name": "KUMSAL ECZANESİ",
-      "address": "ANDİFLİ MAH. ESKİ ANTALYA CAD.NO: 174/A KAŞ / ANTALYA",
-      "phone": "05065168913",
+      "name": "GÖKÇE UMAY ECZANESİ",
+      "address": "OVA MAH. ATATÜRK 1 NOLU KÜME EVLERİ NO:4 KAŞ ANTALYA",
+      "phone": "02428418484",
       "province": "Antalya",
       "district": "Kaş",
       "coordinates": {
-        "lat": 36.199265,
-        "lng": 29.654978
+        "lat": 36.312895,
+        "lng": 29.319852
       }
     },
     {
-      "name": "KARAYEL ECZANESİ",
-      "address": "GÖKYAZI MAH. MUSTAFA MASATLI CAD. NO:26/C DEMRE",
-      "phone": "02428717424",
+      "name": "TAYLI ECZANESİ",
+      "address": "BEYMELEK MAH. ÇAYBAŞI SOK.NO:6/A DEMRE",
+      "phone": "02428721676",
       "province": "Antalya",
       "district": "Demre",
       "coordinates": {
-        "lat": 36.244554401928426,
-        "lng": 29.989344477653503
+        "lat": 36.243619002066566,
+        "lng": 30.016889586841987
       }
     },
     {
-      "name": "TAŞKIN ECZANESİ",
-      "address": "YENI MAH. FATIH BULV. NO:42",
-      "phone": "02428555557",
+      "name": "ASLI ECZANESİ",
+      "address": "KUM MAH. İNÖNÜ 2 CAD. NO:10AB FİNİKE ANTALYA",
+      "phone": "02428552150",
       "province": "Antalya",
       "district": "Finike",
       "coordinates": {
-        "lat": 36.30489312404643,
-        "lng": 30.143550038337708
+        "lat": 36.306228669495745,
+        "lng": 30.151423662900925
       }
     },
     {
-      "name": "TURUNÇOVA ECZANESİ",
-      "address": "**(GECE SAAT 23.59'A KADAR AÇIK)** İNÖNÜ CD. NO:15 TURUNÇOVA FİNİKE",
-      "phone": "02428521240",
+      "name": "ŞANLI ECZANESİ",
+      "address": "**(GECE SAAT 23.59'A KADAR AÇIK)** DEMİRCİLİK MAH. İNÖNÜ CAD. PEMBESUBAŞI SOK.16/1 TURUNÇOVA FİNİKE",
+      "phone": "02428521415",
       "province": "Antalya",
       "district": "Finike",
       "coordinates": {
-        "lat": 36.35187500033524,
-        "lng": 30.1330304145813
+        "lat": 36.35169239001412,
+        "lng": 30.134147105971696
       }
     },
     {
-      "name": "AVCI ECZANESİ",
-      "address": "**(GECE SAAT 23.59'A KADAR AÇIK)**  HASYURT MAH.ATATÜRK CAD.NO:1 FİNİKE",
-      "phone": "05530184688",
+      "name": "EMRE ECZANESİ",
+      "address": "**(GECE SAAT 23.59'A KADAR AÇIK)**  HASYURT MAH.SAHİL CAD.NO:3/C FİNİKE",
+      "phone": "05303680780",
       "province": "Antalya",
       "district": "Finike",
       "coordinates": {
-        "lat": 36.33796232592061,
-        "lng": 30.214403496863937
+        "lat": 36.33840391978616,
+        "lng": 30.213528624479277
       }
     },
     {
-      "name": "ÖZLEM ECZANESİ",
-      "address": "ESKİCAMİ MAH. HALİL ÇIVGIN CAD. NO:19/B ANTALYA",
-      "phone": "02428877575",
+      "name": "ZEHRA ECZANESİ",
+      "address": "KASAPÇAYIRI MAH.KANUNİ SOK.NO:5/16 KUMLUCA",
+      "phone": "02428870755",
       "province": "Antalya",
       "district": "Kumluca",
       "coordinates": {
-        "lat": 36.36657399085722,
-        "lng": 30.28822269243563
+        "lat": 36.371927987956425,
+        "lng": 30.299423933029175
       }
     },
     {
-      "name": "KEMER  YAT LİMANI  ECZANESİ",
-      "address": "MERKEZ  MAH.YALI CADDESİ.NO:9/A KEMER /ANTALYA",
-      "phone": "02428141852",
+      "name": "ÇAĞLA ECZANESİ",
+      "address": "Atatürk Caddesi Kavsak Üstü",
+      "phone": "02428141189",
       "province": "Antalya",
       "district": "Kemer",
       "coordinates": {
-        "lat": 36.59912941899684,
-        "lng": 30.57113325837679
+        "lat": 36.600006956365405,
+        "lng": 30.561062693595886
       }
     },
     {
-      "name": "ÇAMYUVA ECZANESİ",
-      "address": "*(GECE SAAT 02:00'A KADAR AÇIK)* UZUNÇINAR MH.TURİZM BULV. NO:20 ÇAMYUVA BELDESİ",
-      "phone": "02428246479",
+      "name": "ASEL OKYANUS ECZANESİ",
+      "address": "*(GECE SAAT 02:00'A KADAR AÇIK)* BELDİBİ MAH.BAŞKOMUTAN ATATÜRK CAD. NO:520/D KEMER (SGK ANLAŞMASI YOKTUR.)",
+      "phone": "02427561098",
       "province": "Antalya",
       "district": "Kemer",
       "coordinates": null
     },
     {
-      "name": "ÇELEBİ ECZANESİ",
-      "address": "*(GECE SAAT 02:00'A KADAR AÇIK)* Belek Mah. Atatürk 1 Cad. Dış Kapı  no:2D Belek",
-      "phone": "02427153060",
+      "name": "DERMAN ECZANESİ",
+      "address": "MERKEZ MH. NAMIK KEMAL CD.2190 SK.",
+      "phone": "02427221964",
       "province": "Antalya",
       "district": "Serik",
       "coordinates": {
-        "lat": 36.860985796195834,
-        "lng": 31.05738092834365
+        "lat": 36.919902353061,
+        "lng": 31.097171902656555
       }
     },
     {
-      "name": "GÜL ECZANESİ",
-      "address": "MERKEZ MAH. 2014 SOK NO:1/B SERİK ANTALYA",
-      "phone": "02427222035",
+      "name": "BELEK CENTER ECZANESİ",
+      "address": "*(GECE SAAT 02:00'A KADAR AÇIK)* BELEK MAH. TURİZM CAD. NO:45A/B SERİK ANTALYA (SGK ANLAŞMASI YOKTUR)",
+      "phone": "02427151035",
       "province": "Antalya",
       "district": "Serik",
       "coordinates": {
-        "lat": 36.916592,
-        "lng": 31.08355
+        "lat": 36.862705,
+        "lng": 31.054445
       }
     },
     {
-      "name": "YİĞİT ECZANESİ",
-      "address": "İSTİKLAL MAH. KOCATEPE CAD. NO:19/B MERKEZ SAĞLIK OCAĞI KARŞISI",
-      "phone": "05319902327",
+      "name": "AKÇA ECZANESİ",
+      "address": "ISTIKLAL MH. ATATÜRK CD.NO:43",
+      "phone": "02425725311",
       "province": "Antalya",
       "district": "Gazipaşa",
       "coordinates": {
-        "lat": 36.27196279305254,
-        "lng": 32.31414042413235
+        "lat": 36.26846712266875,
+        "lng": 32.318309247493744
       }
     },
     {
-      "name": "MERKEZ ECZANESİ",
-      "address": "ÖMER DURAK CAD. NO:42/7",
-      "phone": "02426781184",
+      "name": "MURTİÇİ ECZANESİ",
+      "address": "HACI ILYAS MAH. ATATÜRK CAD. BAGKUR EVLERI I-BLOK NO.58/A",
+      "phone": "02426781300",
       "province": "Antalya",
       "district": "Akseki",
       "coordinates": {
-        "lat": 37.046704329412094,
-        "lng": 31.789321303367615
+        "lat": 37.042264199329665,
+        "lng": 31.786279678344727
       }
     }
   ]
