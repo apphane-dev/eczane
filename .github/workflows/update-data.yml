@@ -6,8 +6,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
 
 concurrency:
   group: update-pharmacy-data
@@ -29,27 +28,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Scrape fresh data into the working tree, then build and deploy from it.
+      # The scraped JSON is never committed — the daily refresh produces no
+      # commits on main, mirroring how the gleam version deployed straight to
+      # gh-pages. src/data/*.json in the repo is only a build-time baseline.
       - name: Scrape pharmacy data
         run: npm run scrape -- antalya
 
-      - name: Commit changed data
-        id: commit
-        run: |
-          if git diff --quiet -- src/data/; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Pharmacy data is already current."
-            exit 0
-          fi
+      - name: Build site
+        run: npm run build
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/
-          git commit -m "chore: update pharmacy data"
-          git push origin HEAD:main
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      - name: Deploy updated site
-        if: steps.commit.outputs.changed == 'true'
+      - name: Deploy to Cloudflare Pages
+        # Call wrangler directly rather than via cloudflare/wrangler-action.
+        # The action runs `npm i wrangler` inside the repo, which triggers npm's
+        # full-tree resolution and can disturb the project's installed deps.
+        # `npx --yes` fetches wrangler into an isolated cache and runs it, never
+        # touching the project tree. wrangler reads the token/account from env.
+        run: npx --yes wrangler@4 pages deploy dist --project-name=eczane --branch=main
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy.yml --ref main
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
