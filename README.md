@@ -8,7 +8,7 @@ Russian and German.
 
 **Live at [eczane.apphane.dev](https://eczane.apphane.dev).**
 
-- **Nearest first.** One tap sorts every on-duty pharmacy in the province by
+- **Nearest first.** One tap sorts the province's on-duty pharmacies by
   distance from your location.
 - **Map or list.** Pins on a MapLibre map, or a list grouped by district.
 - **One-tap actions.** Call, WhatsApp (mobile numbers), or directions in Google
@@ -116,7 +116,7 @@ Antalya.
    province's on-duty pharmacy page URL.
 2. Run `npm run scrape -- <slug>`. It exits with an error if it parses zero
    pharmacies. Then adapt the selectors in `scripts/scrape.ts` (`.ilce`,
-   `.ilcebas`, `.nobetciDiv`) to the new page's markup.
+   `.ilcebas`, `.nobetciDiv`) to the new page's markup and rerun.
 3. Check the scraper's summary line: a plausible pharmacy count, with
    coordinates on most of them.
 
